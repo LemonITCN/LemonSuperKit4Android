@@ -1,14 +1,12 @@
 package net.lemonsoft.lemonkit4android.example;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import net.lemonsoft.lemonkit.ui.core.LKUIWindow;
+import net.lemonsoft.lemonkit.ui.tip.LKNotification.LKNotification;
 import net.lemonsoft.lemonkit4android.R;
-import net.lemonsoft.lemonkit4android.ui.core.LKUIWindow;
-import net.lemonsoft.lemonkit4android.ui.tip.LKNotification.LKNotification;
 
 public class MainActivity extends LKUIWindow {
 
