@@ -358,7 +358,6 @@ public class LKNotificationBar extends PopupWindow {
         void onHideComplete();
     }
 
-
     public NotificationTouchListener getOnNotificationBarTouchListener() {
         return onNotificationBarTouchListener;
     }
