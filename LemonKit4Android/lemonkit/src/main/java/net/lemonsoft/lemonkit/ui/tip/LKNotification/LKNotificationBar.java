@@ -80,6 +80,10 @@ public class LKNotificationBar extends PopupWindow {
      * 通知栏被点击的监听器
      */
     private NotificationTouchListener onNotificationBarTouchListener;
+    /**
+     * 通知栏状态监听器
+     */
+    private NotificationStateListener notificationStateListener;
 
     /**
      * 自动关闭时间，默认3000ms
@@ -182,12 +186,15 @@ public class LKNotificationBar extends PopupWindow {
                         startAnimation.setAnimationListener(new Animation.AnimationListener() {
                             @Override
                             public void onAnimationStart(Animation animation) {
-
+                                if (notificationStateListener != null && isShowing)
+                                    notificationStateListener.onStartShow();
+                                isShowing = true;
                             }
 
                             @Override
                             public void onAnimationEnd(Animation animation) {
-                                isShowing = true;
+                                if (notificationStateListener != null)
+                                    notificationStateListener.onShowComplete();
                                 new Timer().schedule(new TimerTask() {
                                     @Override
                                     public void run() {
@@ -241,6 +248,18 @@ public class LKNotificationBar extends PopupWindow {
     }
 
     /**
+     * 动画显示通知栏
+     */
+    public void show() {
+        show(true);
+    }
+
+    public void show(NotificationStateListener listener) {
+        notificationStateListener = listener;
+        show();
+    }
+
+    /**
      * 隐藏关闭当前通知栏
      *
      * @param animated 是否动画隐藏
@@ -254,11 +273,14 @@ public class LKNotificationBar extends PopupWindow {
         endTranslateAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+                if (notificationStateListener != null)
+                    notificationStateListener.onStartHide();
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                if (notificationStateListener != null)
+                    notificationStateListener.onHideComplete();
                 dismiss();
             }
 
@@ -320,6 +342,20 @@ public class LKNotificationBar extends PopupWindow {
      */
     public interface NotificationTouchListener {
         void onNotificationTouch(LKNotificationBar bar);
+    }
+
+    public interface NotificationStateListener {
+        // 开始启动
+        void onStartShow();
+
+        // 启动完毕
+        void onShowComplete();
+
+        // 开始隐藏
+        void onStartHide();
+
+        // 隐藏完毕
+        void onHideComplete();
     }
 
 

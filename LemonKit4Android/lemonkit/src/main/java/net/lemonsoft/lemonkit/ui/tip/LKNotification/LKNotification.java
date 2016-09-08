@@ -27,6 +27,10 @@ public class LKNotification {
      * 默认的监听器
      */
     private static LKNotificationBar.NotificationTouchListener default_listener;
+    /**
+     * 默认的自动关闭时间
+     */
+    private static Integer default_autoCloseTime = 3000;
 
     /**
      * 显示LK通知，并监听通知栏点击事件
@@ -37,10 +41,11 @@ public class LKNotification {
      * @param icon       通知图标
      * @param listener   通知的监听器
      */
-    public static void show(Activity inActivity, String title, String content, Bitmap icon, LKNotificationBar.NotificationTouchListener listener) {
+    public static LKNotificationBar create(Activity inActivity, String title, String content, Bitmap icon, LKNotificationBar.NotificationTouchListener listener) {
         LKNotificationBar bar = new LKNotificationBar(inActivity, title, content, icon, default_style);
+        bar.setAutoCloseTime(default_autoCloseTime);
         bar.setOnNotificationBarTouchListener(listener);
-        bar.show(true);
+        return bar;
     }
 
     /**
@@ -52,8 +57,8 @@ public class LKNotification {
      * @param iconDrawableResultId 通知图标的资源ID
      * @param listener             通知的监听器
      */
-    public static void show(Activity inActivity, String title, String content, Integer iconDrawableResultId, LKNotificationBar.NotificationTouchListener listener) {
-        show(inActivity, title, content, BitmapFactory.decodeResource(inActivity.getResources(), iconDrawableResultId), listener);
+    public static LKNotificationBar create(Activity inActivity, String title, String content, Integer iconDrawableResultId, LKNotificationBar.NotificationTouchListener listener) {
+        return create(inActivity, title, content, BitmapFactory.decodeResource(inActivity.getResources(), iconDrawableResultId), listener);
     }
 
     /**
@@ -64,12 +69,13 @@ public class LKNotification {
      * @param content    通知内容
      * @param icon       通知图标
      */
-    public static void show(Activity inActivity, String title, String content, Bitmap icon) {
+    public static LKNotificationBar create(Activity inActivity, String title, String content, Bitmap icon) {
         LKNotificationBar bar = new LKNotificationBar(inActivity, title, content, icon, default_style);
+        bar.setAutoCloseTime(default_autoCloseTime);
         bar.setBarAlpha(default_alpha);
         if (default_listener != null)
             bar.setOnNotificationBarTouchListener(default_listener);
-        bar.show(true);
+        return bar;
     }
 
     /**
@@ -80,8 +86,8 @@ public class LKNotification {
      * @param content              通知内容
      * @param iconDrawableResultId 通知图标的资源ID
      */
-    public static void show(Activity inActivity, String title, String content, Integer iconDrawableResultId) {
-        show(inActivity, title, content, BitmapFactory.decodeResource(inActivity.getResources(), iconDrawableResultId));
+    public static LKNotificationBar create(Activity inActivity, String title, String content, Integer iconDrawableResultId) {
+        return create(inActivity, title, content, BitmapFactory.decodeResource(inActivity.getResources(), iconDrawableResultId));
     }
 
     /**
@@ -91,11 +97,11 @@ public class LKNotification {
      * @param title      通知标题
      * @param content    通知内容
      */
-    public static void show(Activity inActivity, String title, String content) {
+    public static LKNotificationBar create(Activity inActivity, String title, String content) {
         if (default_icon != null)
-            show(inActivity, title, content, default_icon);
-        else
-            System.out.println("You haven't set the default icon.");
+            return create(inActivity, title, content, default_icon);
+        System.out.println("You haven't set the default icon.");
+        return null;
     }
 
     /**
