@@ -15,4 +15,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
         android:text="showLKNotification" />
+    <ImageView
+        android:id="@+id/tempImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#abcdef"/>
 </RelativeLayout>
