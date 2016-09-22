@@ -46,12 +46,7 @@ public class MainActivity extends LKUIWindow {
                     }
                 }), 0);
                 as.addAction(new LKActionItem(getApplicationContext(), "哈哈"), 1);
-                as.addAction(new LKActionItem(getApplicationContext(), "哈哈哈", new LKActionItem.OnItemTouchDelegate() {
-                    @Override
-                    public void onItemTouchAction() {
-                        System.out.println("GOGOGO");
-                    }
-                }), 1);
+                as.addAction(new LKActionItem(getApplicationContext(), "哈哈哈"), 1);
                 as.show();
             }
         });
