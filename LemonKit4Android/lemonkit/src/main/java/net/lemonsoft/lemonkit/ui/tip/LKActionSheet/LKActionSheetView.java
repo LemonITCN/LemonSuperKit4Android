@@ -1,10 +1,13 @@
 package net.lemonsoft.lemonkit.ui.tip.LKActionSheet;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -90,7 +93,7 @@ public class LKActionSheetView extends PopupWindow {
         screenShotImageView = new ImageView(inActivity);
         this.contentLayout.addView(screenShotImageView);
         screenShotImageView.setX(0);
-        screenShotImageView.setY(-SizeTool.getStatusBarHeight(inActivity));// 设置y坐标为负状态栏高度，以防动画执行不自然
+//        screenShotImageView.setY(-SizeTool.getStatusBarHeight(inActivity));// 设置y坐标为负状态栏高度，以防动画执行不自然
         RelativeLayout.LayoutParams screenShotImageViewParams = new RelativeLayout.LayoutParams(this.screenWidth, this.screenHeight);
         screenShotImageView.setLayoutParams(screenShotImageViewParams);
         screenShotImageView.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +138,9 @@ public class LKActionSheetView extends PopupWindow {
      * 动画显示LKActionSheet
      */
     public void show() {
+        initHeadView();// 初始化顶部控件
+        initBodyView();// 初始化内容控件
+
         this.screenShotImageView.setClickable(false);// 开始播放动画之前关闭截图控件的点击事件
         View activityRootView = inActivity.findViewById(android.R.id.content);
         // 显示popupwindow
@@ -175,16 +181,13 @@ public class LKActionSheetView extends PopupWindow {
         screenShotImageView.startAnimation(screenShotAnimationSet);
 
         // 初始化actionSheet显示动画
-        this.actionSheetLayout.setY(this.screenHeight - (this.calViewHeight() + this.headViewHeight) - SizeTool.getStatusBarHeight(inActivity));
+//        this.actionSheetLayout.setY(this.screenHeight - (this.calViewHeight() + this.headViewHeight) - SizeTool.getStatusBarHeight(inActivity));
+//        this.actionSheetLayout.setY(this.screenHeight - (this.calViewHeight() + this.headViewHeight));
+        Integer y = this.screenHeight - (this.calViewHeight() + this.headViewHeight);
         RelativeLayout.LayoutParams actionSheetLayoutParams = new RelativeLayout.LayoutParams(screenWidth, this.calViewHeight() + this.headViewHeight);
         this.actionSheetLayout.setLayoutParams(actionSheetLayoutParams);
-        TranslateAnimation actionSheetLayoutTranslateAnimation
-                = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 1f, Animation.RELATIVE_TO_SELF, 0f);
-        actionSheetLayoutTranslateAnimation.setDuration(500);
-        this.actionSheetLayout.startAnimation(actionSheetLayoutTranslateAnimation);
-
-        initHeadView();// 初始化顶部控件
-        initBodyView();// 初始化内容控件
+        // 动画显示
+        ObjectAnimator.ofFloat(this.actionSheetLayout, "y", this.screenHeight, y).setDuration(500).start();
     }
 
     /**
@@ -203,17 +206,8 @@ public class LKActionSheetView extends PopupWindow {
         screenShotAnimationSet.setFillAfter(true);
         screenShotImageView.startAnimation(screenShotAnimationSet);
 
-        // 设置actionSheet的Y坐标为屏幕高，然后通过动画过渡
-        this.actionSheetLayout.setY(this.screenHeight);
-        RelativeLayout.LayoutParams actionSheetLayoutParams = new RelativeLayout.LayoutParams(screenWidth, this.calViewHeight() + this.headViewHeight + SizeTool.getStatusBarHeight(inActivity));
-        this.actionSheetLayout.setLayoutParams(actionSheetLayoutParams);
-        // actionSheet隐藏动画
-        TranslateAnimation actionSheetLayoutTranslateAnimation
-                = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, -1f, Animation.RELATIVE_TO_SELF, 0f);
-        actionSheetLayoutTranslateAnimation.setDuration(500);
-        this.actionSheetLayout.startAnimation(actionSheetLayoutTranslateAnimation);
         // 添加actionSheet隐藏动画监听
-        actionSheetLayoutTranslateAnimation.setAnimationListener(new Animation.AnimationListener() {
+        screenShotAnimationSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
 
@@ -229,6 +223,15 @@ public class LKActionSheetView extends PopupWindow {
 
             }
         });
+
+        // 设置actionSheet的Y坐标为屏幕高，然后通过动画过渡
+        this.actionSheetLayout.setY(this.screenHeight);
+//        RelativeLayout.LayoutParams actionSheetLayoutParams = new RelativeLayout.LayoutParams(screenWidth, this.calViewHeight() + this.headViewHeight);
+//        RelativeLayout.LayoutParams actionSheetLayoutParams = new RelativeLayout.LayoutParams(screenWidth, this.calViewHeight() + this.headViewHeight + SizeTool.getStatusBarHeight(inActivity));
+        Integer y = this.screenHeight - (this.calViewHeight() + this.headViewHeight);
+//        this.actionSheetLayout.setLayoutParams(actionSheetLayoutParams);
+        // actionSheet隐藏动画
+        ObjectAnimator.ofFloat(this.actionSheetLayout, "y", y, this.screenHeight).setDuration(500).start();
     }
 
     /**
