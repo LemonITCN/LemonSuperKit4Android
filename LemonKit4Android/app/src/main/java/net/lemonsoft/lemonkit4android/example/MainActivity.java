@@ -1,13 +1,16 @@
 package net.lemonsoft.lemonkit4android.example;
 
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import net.lemonsoft.lemonkit.ui.core.LKUIWindow;
+import net.lemonsoft.lemonkit.ui.tip.LKActionSheet.LKActionItem;
 import net.lemonsoft.lemonkit.ui.tip.LKActionSheet.LKActionSheetView;
+import net.lemonsoft.lemonkit.util.SizeTool;
 import net.lemonsoft.lemonkit4android.R;
 
 public class MainActivity extends LKUIWindow {
@@ -18,7 +21,7 @@ public class MainActivity extends LKUIWindow {
         setContentView(R.layout.activity_main);
         final Button button = (Button) findViewById(R.id.showLKNotification);
         final ImageView imageView = (ImageView) findViewById(R.id.tempImageView);
-        imageView.setImageBitmap(BitmapFactory.decodeResource(getResources() , R.mipmap.icon));
+        imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.icon));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -31,14 +34,27 @@ public class MainActivity extends LKUIWindow {
 //                                System.out.println("HIDE@@@@@@@@@@@@@@@@@@@@@ ");
 //                            }
 //                        });
-                LKActionSheetView.defaultActionSheet().show1(MainActivity.this , imageView);
+                final LKActionSheetView as = new LKActionSheetView(MainActivity.this);
+                as.setHeadViewHeight(SizeTool.dipToPx(getApplicationContext(), 40));
+                as.clear();
+                as.setTitle("这是一个LKActionSheet视图，还有iOS版本呢！");
+                as.addActionGroup();
+                as.addAction(new LKActionItem(getApplicationContext(), "取消", Color.RED, new LKActionItem.OnItemTouchDelegate() {
+                    @Override
+                    public void onItemTouchAction() {
+                        as.hide();
+                    }
+                }), 0);
+                as.addAction(new LKActionItem(getApplicationContext(), "哈哈"), 1);
+                as.addAction(new LKActionItem(getApplicationContext(), "哈哈哈", new LKActionItem.OnItemTouchDelegate() {
+                    @Override
+                    public void onItemTouchAction() {
+                        System.out.println("GOGOGO");
+                    }
+                }), 1);
+                as.show();
             }
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
 }
