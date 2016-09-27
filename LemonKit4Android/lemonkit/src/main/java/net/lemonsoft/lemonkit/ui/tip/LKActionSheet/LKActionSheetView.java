@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.lemonsoft.lemonkit.ui.view.layout.LKRelativeLayout;
+import net.lemonsoft.lemonkit.util.ActivityUtil;
 import net.lemonsoft.lemonkit.util.SizeTool;
 
 import java.util.ArrayList;
@@ -93,7 +94,8 @@ public class LKActionSheetView extends PopupWindow {
         screenShotImageView = new ImageView(inActivity);
         this.contentLayout.addView(screenShotImageView);
         screenShotImageView.setX(0);
-//        screenShotImageView.setY(-SizeTool.getStatusBarHeight(inActivity));// 设置y坐标为负状态栏高度，以防动画执行不自然
+        if (!ActivityUtil.isTranslucentStatusBar(inActivity))// 当前不是沉浸状态栏
+            screenShotImageView.setY(-SizeTool.getStatusBarHeight(inActivity));// 设置y坐标为负状态栏高度，以防动画执行不自然
         RelativeLayout.LayoutParams screenShotImageViewParams = new RelativeLayout.LayoutParams(this.screenWidth, this.screenHeight);
         screenShotImageView.setLayoutParams(screenShotImageViewParams);
         screenShotImageView.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +185,9 @@ public class LKActionSheetView extends PopupWindow {
         // 初始化actionSheet显示动画
 //        this.actionSheetLayout.setY(this.screenHeight - (this.calViewHeight() + this.headViewHeight) - SizeTool.getStatusBarHeight(inActivity));
 //        this.actionSheetLayout.setY(this.screenHeight - (this.calViewHeight() + this.headViewHeight));
-        Integer y = this.screenHeight - (this.calViewHeight() + this.headViewHeight);
+        Integer y = y = this.screenHeight - (this.calViewHeight() + this.headViewHeight) - SizeTool.getStatusBarHeight(inActivity);
+        if (ActivityUtil.isTranslucentStatusBar(inActivity))// 当前时沉浸状态栏
+            y = this.screenHeight - (this.calViewHeight() + this.headViewHeight);
         RelativeLayout.LayoutParams actionSheetLayoutParams = new RelativeLayout.LayoutParams(screenWidth, this.calViewHeight() + this.headViewHeight);
         this.actionSheetLayout.setLayoutParams(actionSheetLayoutParams);
         // 动画显示
@@ -228,7 +232,9 @@ public class LKActionSheetView extends PopupWindow {
         this.actionSheetLayout.setY(this.screenHeight);
 //        RelativeLayout.LayoutParams actionSheetLayoutParams = new RelativeLayout.LayoutParams(screenWidth, this.calViewHeight() + this.headViewHeight);
 //        RelativeLayout.LayoutParams actionSheetLayoutParams = new RelativeLayout.LayoutParams(screenWidth, this.calViewHeight() + this.headViewHeight + SizeTool.getStatusBarHeight(inActivity));
-        Integer y = this.screenHeight - (this.calViewHeight() + this.headViewHeight);
+        Integer y = this.screenHeight - (this.calViewHeight() + this.headViewHeight) - SizeTool.getStatusBarHeight(inActivity);
+        if (ActivityUtil.isTranslucentStatusBar(inActivity))
+            y = this.screenHeight - (this.calViewHeight() + this.headViewHeight);
 //        this.actionSheetLayout.setLayoutParams(actionSheetLayoutParams);
         // actionSheet隐藏动画
         ObjectAnimator.ofFloat(this.actionSheetLayout, "y", y, this.screenHeight).setDuration(500).start();

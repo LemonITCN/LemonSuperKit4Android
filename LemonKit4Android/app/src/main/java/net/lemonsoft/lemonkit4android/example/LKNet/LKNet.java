@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 import net.lemonsoft.lemonkit.delegate.NetUtilResultDelegate;
 import net.lemonsoft.lemonkit.util.ByteUtil;
-import net.lemonsoft.lemonkit.util.EncodeTool;
+import net.lemonsoft.lemonkit.util.EncodeUtil;
 import net.lemonsoft.lemonkit.util.NetUtil;
 
 import java.util.ArrayList;
@@ -33,8 +33,8 @@ public class LKNet {
                 String key = String.format("dlfc_%s_%d", token, i);
                 byte[] bitmapByteArr = ByteUtil.bitmapToByteArray(bitmaps.get(i));
                 data.put(String.format("%s_%d",
-                        EncodeTool.byteArrayToHexString(
-                                EncodeTool.encodeHmacMD5(bitmapByteArr, key)
+                        EncodeUtil.byteArrayToHexString(
+                                EncodeUtil.encodeHmacMD5(bitmapByteArr, key)
                         ).toUpperCase()
                         , i), bitmapByteArr);
             }
