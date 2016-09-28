@@ -1,18 +1,15 @@
 package net.lemonsoft.lemonkit.ui.tip.LKActionSheet;
 
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewPropertyAnimator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -20,7 +17,7 @@ import android.widget.TextView;
 
 import net.lemonsoft.lemonkit.ui.view.layout.LKRelativeLayout;
 import net.lemonsoft.lemonkit.util.ActivityUtil;
-import net.lemonsoft.lemonkit.util.SizeTool;
+import net.lemonsoft.lemonkit.util.SizeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,13 +66,13 @@ public class LKActionSheetView extends PopupWindow {
         super();
         this.inActivity = inActivity;
 
-        this.groupHeightSpace = SizeTool.dipToPx(inActivity, 5);// 设置默认的组间的空隙
+        this.groupHeightSpace = SizeUtil.dipToPx(inActivity, 5);// 设置默认的组间的空隙
 
         this.clear();
 
         // 计算屏幕的宽度和高度
-        this.screenWidth = SizeTool.getScreenWidth(inActivity);
-        this.screenHeight = SizeTool.getScreenHeight(inActivity);
+        this.screenWidth = SizeUtil.getScreenWidth(inActivity);
+        this.screenHeight = SizeUtil.getScreenHeight(inActivity);
         View activityRootView = inActivity.findViewById(android.R.id.content);
         // 刷新绘制Activity
         activityRootView.invalidate();
@@ -95,7 +92,7 @@ public class LKActionSheetView extends PopupWindow {
         this.contentLayout.addView(screenShotImageView);
         screenShotImageView.setX(0);
         if (!ActivityUtil.isTranslucentStatusBar(inActivity))// 当前不是沉浸状态栏
-            screenShotImageView.setY(-SizeTool.getStatusBarHeight(inActivity));// 设置y坐标为负状态栏高度，以防动画执行不自然
+            screenShotImageView.setY(-SizeUtil.getStatusBarHeight(inActivity));// 设置y坐标为负状态栏高度，以防动画执行不自然
         RelativeLayout.LayoutParams screenShotImageViewParams = new RelativeLayout.LayoutParams(this.screenWidth, this.screenHeight);
         screenShotImageView.setLayoutParams(screenShotImageViewParams);
         screenShotImageView.setOnClickListener(new View.OnClickListener() {
@@ -183,9 +180,9 @@ public class LKActionSheetView extends PopupWindow {
         screenShotImageView.startAnimation(screenShotAnimationSet);
 
         // 初始化actionSheet显示动画
-//        this.actionSheetLayout.setY(this.screenHeight - (this.calViewHeight() + this.headViewHeight) - SizeTool.getStatusBarHeight(inActivity));
+//        this.actionSheetLayout.setY(this.screenHeight - (this.calViewHeight() + this.headViewHeight) - SizeUtil.getStatusBarHeight(inActivity));
 //        this.actionSheetLayout.setY(this.screenHeight - (this.calViewHeight() + this.headViewHeight));
-        Integer y = y = this.screenHeight - (this.calViewHeight() + this.headViewHeight) - SizeTool.getStatusBarHeight(inActivity);
+        Integer y = y = this.screenHeight - (this.calViewHeight() + this.headViewHeight) - SizeUtil.getStatusBarHeight(inActivity);
         if (ActivityUtil.isTranslucentStatusBar(inActivity))// 当前时沉浸状态栏
             y = this.screenHeight - (this.calViewHeight() + this.headViewHeight);
         RelativeLayout.LayoutParams actionSheetLayoutParams = new RelativeLayout.LayoutParams(screenWidth, this.calViewHeight() + this.headViewHeight);
@@ -231,8 +228,8 @@ public class LKActionSheetView extends PopupWindow {
         // 设置actionSheet的Y坐标为屏幕高，然后通过动画过渡
         this.actionSheetLayout.setY(this.screenHeight);
 //        RelativeLayout.LayoutParams actionSheetLayoutParams = new RelativeLayout.LayoutParams(screenWidth, this.calViewHeight() + this.headViewHeight);
-//        RelativeLayout.LayoutParams actionSheetLayoutParams = new RelativeLayout.LayoutParams(screenWidth, this.calViewHeight() + this.headViewHeight + SizeTool.getStatusBarHeight(inActivity));
-        Integer y = this.screenHeight - (this.calViewHeight() + this.headViewHeight) - SizeTool.getStatusBarHeight(inActivity);
+//        RelativeLayout.LayoutParams actionSheetLayoutParams = new RelativeLayout.LayoutParams(screenWidth, this.calViewHeight() + this.headViewHeight + SizeUtil.getStatusBarHeight(inActivity));
+        Integer y = this.screenHeight - (this.calViewHeight() + this.headViewHeight) - SizeUtil.getStatusBarHeight(inActivity);
         if (ActivityUtil.isTranslucentStatusBar(inActivity))
             y = this.screenHeight - (this.calViewHeight() + this.headViewHeight);
 //        this.actionSheetLayout.setLayoutParams(actionSheetLayoutParams);

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import net.lemonsoft.lemonkit.ui.core.LKUIWindow;
 import net.lemonsoft.lemonkit.ui.tip.LKActionSheet.LKActionItem;
 import net.lemonsoft.lemonkit.ui.tip.LKActionSheet.LKActionSheetView;
-import net.lemonsoft.lemonkit.util.SizeTool;
+import net.lemonsoft.lemonkit.util.SizeUtil;
 import net.lemonsoft.lemonkit4android.R;
 
 public class MainActivity extends LKUIWindow {
@@ -35,7 +35,7 @@ public class MainActivity extends LKUIWindow {
 //                            }
 //                        });
                 final LKActionSheetView as = new LKActionSheetView(MainActivity.this);
-                as.setHeadViewHeight(SizeTool.dipToPx(getApplicationContext(), 40));
+                as.setHeadViewHeight(SizeUtil.dipToPx(getApplicationContext(), 40));
                 as.clear();
                 as.setTitle("这是一个LKActionSheet视图，还有iOS版本呢！");
                 as.addActionGroup();

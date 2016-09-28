@@ -16,7 +16,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import net.lemonsoft.lemonkit.util.SizeTool;
+import net.lemonsoft.lemonkit.util.SizeUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -103,14 +103,14 @@ public class LKNotificationBar extends PopupWindow {
 
         contentLayout = new RelativeLayout(context);
         final RelativeLayout.LayoutParams contentLayoutParams = new RelativeLayout.LayoutParams(
-                SizeTool.getScreenWidth(context), RelativeLayout.LayoutParams.WRAP_CONTENT);
+                SizeUtil.getScreenWidth(context), RelativeLayout.LayoutParams.WRAP_CONTENT);
         contentLayout.setLayoutParams(contentLayoutParams);
         this.setContentView(contentLayout);
 
         // 初始化容器view
         container = new RelativeLayout(context);
         final RelativeLayout.LayoutParams containerParams =
-                new RelativeLayout.LayoutParams(SizeTool.getScreenWidth(context),
+                new RelativeLayout.LayoutParams(SizeUtil.getScreenWidth(context),
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
         container.setLayoutParams(containerParams);
         container.setBackgroundColor(backgroundColor);
@@ -129,7 +129,7 @@ public class LKNotificationBar extends PopupWindow {
         iconView = new ImageView(context);
         iconView.setImageBitmap(icon);
         iconView.setX(CONTAINER_PADDING);
-        iconView.setY(CONTAINER_PADDING + SizeTool.getStatusBarHeight(context));
+        iconView.setY(CONTAINER_PADDING + SizeUtil.getStatusBarHeight(context));
         RelativeLayout.LayoutParams iconParams =
                 new RelativeLayout.LayoutParams(ICON_WIDTH, ICON_WIDTH);
         iconView.setLayoutParams(iconParams);
@@ -139,7 +139,7 @@ public class LKNotificationBar extends PopupWindow {
         titleTextView.setText(title);
         Integer titleX = (int) iconView.getX() + ICON_WIDTH + ITEM_SPACING;
         RelativeLayout.LayoutParams titleParams = new RelativeLayout.LayoutParams(
-                (SizeTool.getScreenWidth(context) - titleX - CONTAINER_PADDING), RelativeLayout.LayoutParams.WRAP_CONTENT);
+                (SizeUtil.getScreenWidth(context) - titleX - CONTAINER_PADDING), RelativeLayout.LayoutParams.WRAP_CONTENT);
         titleTextView.setLayoutParams(titleParams);
         titleTextView.setTextColor(textColor);
         titleTextView.setX(titleX);
@@ -162,7 +162,7 @@ public class LKNotificationBar extends PopupWindow {
         bottomLineView = new View(context);
         bottomLineView.setBackgroundColor(Color.argb(180, 150, 150, 150));
         final RelativeLayout.LayoutParams bottomLineParams =
-                new RelativeLayout.LayoutParams(SizeTool.getScreenWidth(context), 1);
+                new RelativeLayout.LayoutParams(SizeUtil.getScreenWidth(context), 1);
         bottomLineView.setLayoutParams(bottomLineParams);
 
         // 把子控件添加到容器中
@@ -213,7 +213,7 @@ public class LKNotificationBar extends PopupWindow {
                     }
                 });
 
-        this.setWidth(SizeTool.getScreenWidth(context));// 设置当前控件的宽度为屏幕宽
+        this.setWidth(SizeUtil.getScreenWidth(context));// 设置当前控件的宽度为屏幕宽
         this.setHeight(RelativeLayout.LayoutParams.WRAP_CONTENT);
     }
 

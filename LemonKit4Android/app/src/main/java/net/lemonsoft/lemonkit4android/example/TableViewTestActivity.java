@@ -3,13 +3,11 @@ package net.lemonsoft.lemonkit4android.example;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import net.lemonsoft.lemonkit.model.LKIndexPath;
 import net.lemonsoft.lemonkit.ui.view.LKUITableView;
 import net.lemonsoft.lemonkit.ui.view.LKUITableViewCell;
-import net.lemonsoft.lemonkit.util.SizeTool;
 
 /**
  * Created by lemonsoft on 16-9-27.

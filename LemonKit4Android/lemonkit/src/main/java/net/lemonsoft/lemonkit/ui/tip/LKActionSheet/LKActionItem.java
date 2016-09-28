@@ -4,11 +4,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import net.lemonsoft.lemonkit.util.SizeTool;
+import net.lemonsoft.lemonkit.util.SizeUtil;
 
 /**
  * LKActionSheet的action单元
@@ -31,12 +30,12 @@ public class LKActionItem {
     private Integer height;
 
     public LKActionItem(Context context, String title, Integer height, int textColor) {
-        DEFAULT_HEIGHT = SizeTool.dipToPx(context, 46);
+        DEFAULT_HEIGHT = SizeUtil.dipToPx(context, 46);
 
         this.context = context;
         this.height = height == 0 ? DEFAULT_HEIGHT : height;
 
-        Integer screenWidth = SizeTool.getScreenWidth(context);
+        Integer screenWidth = SizeUtil.getScreenWidth(context);
 
         TextView titleView = new TextView(context);
         titleView.setBackgroundColor(Color.TRANSPARENT);// 设置按钮透明背景色
