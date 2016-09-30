@@ -22,12 +22,11 @@ public class TableViewTestActivity extends Activity {
         RelativeLayout relativeLayout = new RelativeLayout(this);
         relativeLayout.setX(0);
         relativeLayout.setY(0);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT ,RelativeLayout.LayoutParams.MATCH_PARENT);
-        setContentView(relativeLayout , layoutParams);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        setContentView(relativeLayout, layoutParams);
 
         LKUITableView tableView = new LKUITableView(this);
         tableView.setLayoutParams(layoutParams);
-        tableView.setBackgroundColor(Color.GRAY);
         tableView.setLayoutParams(layoutParams);
         relativeLayout.addView(tableView);
 
@@ -39,7 +38,11 @@ public class TableViewTestActivity extends Activity {
 
             @Override
             public LKUITableViewCell cellForRowAtIndexPath(LKUITableView tableView, LKIndexPath indexPath) {
-                return null;
+                LKUITableViewCell cell = new LKUITableViewCell(TableViewTestActivity.this);
+                if (indexPath.row == 1)
+                    cell.setBackgroundColor(Color.CYAN);
+                return cell;
+
             }
 
             @Override
