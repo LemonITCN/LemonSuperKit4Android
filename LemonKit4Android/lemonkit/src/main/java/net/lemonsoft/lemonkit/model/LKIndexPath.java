@@ -20,4 +20,15 @@ public class LKIndexPath {
         return new LKIndexPath(section, row);
     }
 
+    /**
+     * 两个LKIndexPath判断相等
+     *
+     * @param indexPath 要比较的另外一个indexPath
+     * @return 是否一致的布尔值
+     */
+    public boolean equals(LKIndexPath indexPath) {
+        if (indexPath == null)
+            return false;
+        return section == indexPath.section && row == indexPath.row;
+    }
 }

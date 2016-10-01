@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import net.lemonsoft.lemonkit.model.LKIndexPath;
+import net.lemonsoft.lemonkit.model.LKUITableViewRowAction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,7 +126,6 @@ public class LKUITableView extends ScrollView {
         FrameLayout.LayoutParams contentViewLayoutParams =
                 new FrameLayout.LayoutParams(getWidth(), contentHeight);// 整个tableView控件大小的params
         this.contentView.setLayoutParams(contentViewLayoutParams);
-        this.contentView.setBackgroundColor(Color.GREEN);
     }
 
     /**
@@ -134,20 +134,37 @@ public class LKUITableView extends ScrollView {
      * @param indexPath 当前初始化行的位置信息
      */
     private void initCell(final LKIndexPath indexPath, Integer cellHeight, Integer y) {
-        final Integer actionWidth = 400;
-
-        RelativeLayout.LayoutParams cellContainerParams
-                = new RelativeLayout.LayoutParams(getWidth() + actionWidth, cellHeight);// 使用等同于控件的宽度，用户设置的高度
         final RelativeLayout cellContainerView = new RelativeLayout(context);
-        cellContainerView.setLayoutParams(cellContainerParams);
         cellContainerView.setX(0);
         cellContainerView.setY(0);
-        cellContainerView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+        Integer actionWidth = 0;
+        List<LKUITableViewRowAction> actions = delegate.editActionsForRowAtIndexPath(this, indexPath);
+        if (actions != null) {
+            for (final LKUITableViewRowAction action : actions) {
+                RelativeLayout actionItemLayout = new RelativeLayout(context);
+                actionItemLayout.setLayoutParams(new RelativeLayout.LayoutParams(action.getWidth(), cellHeight));// 初始化action控件大小
+                action.getContainerView().setLayoutParams(new RelativeLayout.LayoutParams(action.getWidth(), cellHeight));// 设置action控件高度为cell高度
+                action.getContainerView().setX(0);
+                action.getContainerView().setY(0);
+                actionItemLayout.addView(action.getContainerView());
+                actionItemLayout.setX(actionWidth + getWidth());
+                actionItemLayout.setBackgroundColor(action.getBackgroundColor());
+                actionItemLayout.setY(0);
+                actionItemLayout.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 调用action点击事件
+                        action.getTouchAction().onTouch(LKUITableView.this, action, indexPath);
+                        closeCurrentSlide();
+                    }
+                });
+                cellContainerView.addView(actionItemLayout);
+                actionWidth += action.getWidth();
             }
-        });
+        }
+        RelativeLayout.LayoutParams cellContainerParams
+                = new RelativeLayout.LayoutParams(getWidth() + actionWidth, cellHeight);// 使用等同于控件的宽度，用户设置的高度
+        cellContainerView.setLayoutParams(cellContainerParams);
 
         int[] colors = {Color.BLUE, Color.YELLOW, Color.RED};
         cellContainerView.setBackgroundColor(colors[indexPath.row]);
@@ -159,18 +176,19 @@ public class LKUITableView extends ScrollView {
         scrollView.setLayoutParams(cellSizeParams);
         scrollView.setX(0);// 最左边开始
         scrollView.setY(y);// 顶部开始
+
+        final Integer finalActionWidth = actionWidth;
         scrollView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == event.ACTION_MOVE && !indexPath.equals(slidedCell)) {
-                    if (slidedCell != null)
-                        cellScrollContainerPool.get(slidedCell).smoothScrollTo(0, 0);
+                    closeCurrentSlide();// 关闭当前侧滑
                 }
                 if (event.getAction() == event.ACTION_UP) {// 判断是触摸抬起的时候
-                    if (scrollView.getScrollX() < actionWidth / 2)
+                    if (scrollView.getScrollX() < finalActionWidth / 2)
                         scrollView.smoothScrollTo(0, 0);// 平滑回到0
                     else {
-                        scrollView.smoothScrollTo(actionWidth, 0);// 平滑移动到完全打开
+                        scrollView.smoothScrollTo(finalActionWidth, 0);// 平滑移动到完全打开
                     }
                     return true;// 这里返回true，否则smoothScrollTo不可用
                 }
@@ -180,17 +198,31 @@ public class LKUITableView extends ScrollView {
         scrollView.setOnScrollListener(new LKHorizontalScrollView.ScrollListener() {
             @Override
             public void onScroll(int l, int t, int oldl, int oldt) {
-                if (l == actionWidth)
+                if (l == finalActionWidth)
                     slidedCell = indexPath;
                 else if (l == 0 && slidedCell != null && slidedCell.equals(indexPath))
                     slidedCell = null;
             }
         });
-        scrollView.addView(cellContainerView);
+        scrollView.addView(cellContainerView);// 把整个容器控件放入到横向scrollView中
+
+        // 初始化cellContentView，即控件主显示内容，不包括rowAction相关的内容
+        RelativeLayout cellContentView = new RelativeLayout(context);
+        cellContentView.setLayoutParams(cellSizeParams);
+        cellContentView.setX(0);
+        cellContentView.setY(0);
+        cellContentView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeCurrentSlide();// 点击内容时候让其自动关闭已经侧滑的cell
+                delegate.didSelectRowAtIndexPath(LKUITableView.this, indexPath);// 调用代理中的行点击事件
+            }
+        });
         LKUITableViewCell cell = dataSource.cellForRowAtIndexPath(this, indexPath);
         cell.setLayoutParams(cellSizeParams);
-        cellContainerView.addView(cell);
+        cellContentView.addView(cell);// 把LKTableViewCell控件实际放入到contentView中显示
 
+        cellContainerView.addView(cellContentView);
         contentView.addView(scrollView);
         cellScrollContainerPool.put(indexPath, scrollView);
     }
@@ -244,15 +276,15 @@ public class LKUITableView extends ScrollView {
         if (t > lastScrollY) {
             // tableView向上滚动
             if (currentTopIndex > lastTopIndex)// 元素被从屏幕上方滚动出屏幕
-                System.out.println("指定元素被从上面滚动出屏幕了：" + typeRecorder.get(lastTopIndex));
+                scrollOutScreen(typeRecorder.get(lastTopIndex));
             if (currentBottomIndex > lastBottomIndex)// 元素从屏幕底部滚动进入屏幕
-                System.out.println("指定元素被从底部滚动进入屏幕了：" + typeRecorder.get(currentBottomIndex));
+                scrollIntoScreen(typeRecorder.get(currentBottomIndex));
         } else if (t < lastScrollY) {
             // tableView向下滚动
             if (currentTopIndex < lastTopIndex)// 元素被从屏幕上方滚动进入屏幕
-                System.out.println("指定元素从屏幕上方进入了：" + typeRecorder.get(currentTopIndex));
+                scrollIntoScreen(typeRecorder.get(currentTopIndex));
             if (currentBottomIndex < lastBottomIndex)// 元素从屏幕底部滚动移出去了
-                System.out.println("指定元素从屏幕下方滚动出了屏幕：" + typeRecorder.get(lastBottomIndex));
+                scrollOutScreen(typeRecorder.get(lastBottomIndex));
         }
         lastTopIndex = currentTopIndex;
         lastBottomIndex = currentBottomIndex;
@@ -262,15 +294,40 @@ public class LKUITableView extends ScrollView {
     /**
      * 滚动进入屏幕
      */
-    private void scrollIntoScreen() {
-
+    private void scrollIntoScreen(String pathInfo) {
+        System.out.println("----> IN" + pathInfo);
     }
 
     /**
      * 滚出屏幕
      */
-    private void scrollOutScreen() {
+    private void scrollOutScreen(String pathInfo) {
+        System.out.println("----> OUT" + pathInfo);
+        LKIndexPath indexPath = getIndexPathWithPathInfoString(pathInfo);
+        if (indexPath != null && indexPath.equals(slidedCell))// 移除屏幕的cell要关闭侧滑
+            closeCurrentSlide();
+    }
 
+    /**
+     * 关闭当前已经侧滑的cell侧滑
+     */
+    public void closeCurrentSlide() {
+        if (slidedCell != null)
+            cellScrollContainerPool.get(slidedCell).smoothScrollTo(0, 0);
+    }
+
+    /**
+     * 通过路径信息字符串得到LKIndexPath
+     *
+     * @param pathInfo 路径信息字符串
+     * @return 路径信息字符串对应的IndexPath
+     */
+    public LKIndexPath getIndexPathWithPathInfoString(String pathInfo) {
+        String[] pathItems = pathInfo.split("_");
+        if (pathItems[0].equals("c")) {// 是cell
+            return LKIndexPath.make(Integer.parseInt(pathItems[1]), Integer.parseInt(pathItems[2]));
+        }
+        return null;// 不是cell
     }
 
     /**
@@ -301,6 +358,10 @@ public class LKUITableView extends ScrollView {
         Integer heightForHeaderInSection(LKUITableView tableView, Integer section);
 
         Integer heightForFooterInSection(LKUITableView tableView, Integer section);
+
+        void didSelectRowAtIndexPath(LKUITableView tableView, LKIndexPath indexPath);
+
+        List<LKUITableViewRowAction> editActionsForRowAtIndexPath(LKUITableView tableView, LKIndexPath indexPath);
     }
 
 }
