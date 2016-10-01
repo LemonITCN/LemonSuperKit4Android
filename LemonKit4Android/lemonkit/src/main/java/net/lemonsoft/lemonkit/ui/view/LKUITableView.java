@@ -166,9 +166,6 @@ public class LKUITableView extends ScrollView {
                 = new RelativeLayout.LayoutParams(getWidth() + actionWidth, cellHeight);// 使用等同于控件的宽度，用户设置的高度
         cellContainerView.setLayoutParams(cellContainerParams);
 
-        int[] colors = {Color.BLUE, Color.YELLOW, Color.RED};
-        cellContainerView.setBackgroundColor(colors[indexPath.row]);
-
         RelativeLayout.LayoutParams cellSizeParams
                 = new RelativeLayout.LayoutParams(getWidth(), cellHeight);// 使用等同于控件的宽度，用户设置的高度
         final LKHorizontalScrollView scrollView = new LKHorizontalScrollView(context);
