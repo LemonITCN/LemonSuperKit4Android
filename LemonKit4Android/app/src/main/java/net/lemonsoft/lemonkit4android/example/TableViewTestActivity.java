@@ -79,7 +79,7 @@ public class TableViewTestActivity extends Activity {
         tableView.delegate = new LKUITableView.Delegate() {
             @Override
             public Integer heightForRowAtIndexPath(LKUITableView tableView, LKIndexPath indexPath) {
-                return 200;
+                return 300;
             }
 
             @Override
