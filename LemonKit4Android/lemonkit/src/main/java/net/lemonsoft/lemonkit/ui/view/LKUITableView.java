@@ -36,7 +36,9 @@ public class LKUITableView extends ScrollView {
     private HashMap<Integer, String> typeRecorder;
     private List<Integer> startLocationRecorder;// 起始位置记录表
 
-    private HashMap<LKIndexPath, HorizontalScrollView> cellScrollContainerPool;
+    private HashMap<LKIndexPath, HorizontalScrollView> cellScrollContainerPool;// cell的scrollView缓存池
+    private HashMap<String, ArrayList<LKUITableViewCell>> reusePool;// 复用机制池
+    private HashMap<String, LKUITableViewCell> frontCellPool;// 正在显示的tableViewCell池
 
     private RelativeLayout contentView;
 
@@ -53,6 +55,7 @@ public class LKUITableView extends ScrollView {
         typeRecorder = new HashMap<>();// 创建一个y坐标记录池
         startLocationRecorder = new ArrayList<>();// 创建一个y底部坐标记录池
         cellScrollContainerPool = new HashMap<>();// 创建一个根据LKIndexPath索引cellScrollView的池
+        reusePool = new HashMap<>();// 初始化复用机制池
         this.addView(this.contentView);
     }
 
@@ -102,7 +105,6 @@ public class LKUITableView extends ScrollView {
                     LKIndexPath indexPath = LKIndexPath.make(si, ri);
                     Integer cellHeight = delegate.heightForRowAtIndexPath(this, indexPath);
                     recorderAdd("c", si, ri, contentHeight, cellHeight);// 把cell加入游标记录中，准备复用机制的使用
-                    initCell(indexPath, cellHeight, contentHeight);// 初始化cell行控件
                     contentHeight += cellHeight;
                 }
                 Integer footerHeight = delegate.heightForFooterInSection(this, si);
@@ -113,6 +115,7 @@ public class LKUITableView extends ScrollView {
             initContentView(contentHeight);// 初始化容器控件
             lastBottomIndex = spaceOfLocation(getHeight());// 初始化计算底部所处索引
         }
+        getScreenRangeItems();
     }
 
     /**
@@ -273,15 +276,15 @@ public class LKUITableView extends ScrollView {
         if (t > lastScrollY) {
             // tableView向上滚动
             if (currentTopIndex > lastTopIndex)// 元素被从屏幕上方滚动出屏幕
-                scrollOutScreen(typeRecorder.get(lastTopIndex));
+                scrollOutScreen(lastTopIndex, typeRecorder.get(lastTopIndex));
             if (currentBottomIndex > lastBottomIndex)// 元素从屏幕底部滚动进入屏幕
-                scrollIntoScreen(typeRecorder.get(currentBottomIndex));
+                scrollIntoScreen(currentBottomIndex, typeRecorder.get(currentBottomIndex));
         } else if (t < lastScrollY) {
             // tableView向下滚动
             if (currentTopIndex < lastTopIndex)// 元素被从屏幕上方滚动进入屏幕
-                scrollIntoScreen(typeRecorder.get(currentTopIndex));
+                scrollIntoScreen(currentTopIndex, typeRecorder.get(currentTopIndex));
             if (currentBottomIndex < lastBottomIndex)// 元素从屏幕底部滚动移出去了
-                scrollOutScreen(typeRecorder.get(lastBottomIndex));
+                scrollOutScreen(lastBottomIndex, typeRecorder.get(lastBottomIndex));
         }
         lastTopIndex = currentTopIndex;
         lastBottomIndex = currentBottomIndex;
@@ -291,14 +294,15 @@ public class LKUITableView extends ScrollView {
     /**
      * 滚动进入屏幕
      */
-    private void scrollIntoScreen(String pathInfo) {
+    private void scrollIntoScreen(Integer index, String pathInfo) {
         System.out.println("----> IN" + pathInfo);
+        initLineWithPathInfoString(index);// 要显示这个行了，现在初始化这个行
     }
 
     /**
      * 滚出屏幕
      */
-    private void scrollOutScreen(String pathInfo) {
+    private void scrollOutScreen(Integer index, String pathInfo) {
         System.out.println("----> OUT" + pathInfo);
         LKIndexPath indexPath = getIndexPathWithPathInfoString(pathInfo);
         if (indexPath != null && indexPath.equals(slidedCell))// 移除屏幕的cell要关闭侧滑
@@ -325,6 +329,35 @@ public class LKUITableView extends ScrollView {
             return LKIndexPath.make(Integer.parseInt(pathItems[1]), Integer.parseInt(pathItems[2]));
         }
         return null;// 不是cell
+    }
+
+    /**
+     * 获取当前屏幕正在显示的
+     */
+    public void getScreenRangeItems() {
+        Integer startLocation = spaceOfLocation(0);
+        Integer endLocation = spaceOfLocation(getHeight());
+        for (int i = startLocation; i <= endLocation; i++) {
+            initLineWithPathInfoString(i);
+        }
+    }
+
+    public void initLineWithPathInfoString(Integer recorderItemIndex) {
+        String pathInfo = typeRecorder.get(recorderItemIndex);
+        String[] items = pathInfo.split("_");
+        switch (items[0]) {
+            case "h":
+
+                break;
+            case "f":
+
+                break;
+            default:
+                LKIndexPath indexPath = getIndexPathWithPathInfoString(pathInfo);
+                initCell(indexPath,
+                        delegate.heightForRowAtIndexPath(this, indexPath),
+                        startLocationRecorder.get(recorderItemIndex));// 初始化cell行控件
+        }
     }
 
     /**
