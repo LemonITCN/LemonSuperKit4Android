@@ -6,7 +6,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
-import net.lemonsoft.lemonkit.ui.view.LKUITableView;
+import net.lemonsoft.lemonkit.ui.view.baseView.LKUITableView;
 import net.lemonsoft.lemonkit.util.SizeUtil;
 
 /**

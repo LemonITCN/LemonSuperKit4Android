@@ -1,5 +1,6 @@
 package net.lemonsoft.lemonkit4android.example;
 
+import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,7 +14,7 @@ import net.lemonsoft.lemonkit.ui.tip.LKActionSheet.LKActionSheetView;
 import net.lemonsoft.lemonkit.util.SizeUtil;
 import net.lemonsoft.lemonkit4android.R;
 
-public class MainActivity extends LKUIWindow {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

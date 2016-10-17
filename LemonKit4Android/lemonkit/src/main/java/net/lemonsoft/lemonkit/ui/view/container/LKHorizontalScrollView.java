@@ -1,4 +1,4 @@
-package net.lemonsoft.lemonkit.ui.view;
+package net.lemonsoft.lemonkit.ui.view.container;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,9 +9,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ * 自定义水平滚动视图
  * Created by lemonsoft on 16-9-28.
  */
-
 public class LKHorizontalScrollView extends HorizontalScrollView {
 
     private ScrollListener onScrollListener;

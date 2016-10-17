@@ -1,4 +1,4 @@
-package net.lemonsoft.lemonkit.ui.view;
+package net.lemonsoft.lemonkit.ui.view.baseView;
 
 import android.content.Context;
 import android.graphics.Color;

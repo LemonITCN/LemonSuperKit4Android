@@ -1,8 +1,7 @@
-package net.lemonsoft.lemonkit.ui.view;
+package net.lemonsoft.lemonkit.ui.view.baseView;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -10,8 +9,11 @@ import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
+import net.lemonsoft.lemonkit.delegate.LKUITableView.LKUITableViewDataSource;
+import net.lemonsoft.lemonkit.delegate.LKUITableView.LKUITableViewDelegate;
 import net.lemonsoft.lemonkit.model.LKIndexPath;
 import net.lemonsoft.lemonkit.model.LKUITableViewRowAction;
+import net.lemonsoft.lemonkit.ui.view.container.LKHorizontalScrollView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +27,8 @@ public class LKUITableView extends ScrollView {
 
     private Context context;
 
-    public DataSource dataSource;// 数据源
-    public Delegate delegate;// 代理
+    public LKUITableViewDataSource dataSource;// 数据源
+    public LKUITableViewDelegate delegate;// 代理
 
     private LKIndexPath slidedCell;// 已经侧滑的cell的路径，如果没有，则为null
 
@@ -56,6 +58,7 @@ public class LKUITableView extends ScrollView {
         startLocationRecorder = new ArrayList<>();// 创建一个y底部坐标记录池
         cellScrollContainerPool = new HashMap<>();// 创建一个根据LKIndexPath索引cellScrollView的池
         reusePool = new HashMap<>();// 初始化复用机制池
+        frontCellPool = new HashMap<>();// 创建前端正在显示的cell的存储池
         this.addView(this.contentView);
     }
 
@@ -132,16 +135,18 @@ public class LKUITableView extends ScrollView {
     }
 
     /**
-     * 初始化cell
+     * 初始化cell，该函数负责把LKUITableViewCell显示到屏幕上
      *
      * @param indexPath 当前初始化行的位置信息
      */
-    private void initCell(final LKIndexPath indexPath, Integer cellHeight, Integer y) {
+    private LKUITableViewCell initCell(final LKIndexPath indexPath, Integer cellHeight, Integer y) {
         final RelativeLayout cellContainerView = new RelativeLayout(context);
         cellContainerView.setX(0);
         cellContainerView.setY(0);
         Integer actionWidth = 0;
+        // 通过代理函数获取当前行需要显示的actions
         List<LKUITableViewRowAction> actions = delegate.editActionsForRowAtIndexPath(this, indexPath);
+        //  设置actions相关-开始
         if (actions != null) {
             for (final LKUITableViewRowAction action : actions) {
                 RelativeLayout actionItemLayout = new RelativeLayout(context);
@@ -165,9 +170,11 @@ public class LKUITableView extends ScrollView {
                 actionWidth += action.getWidth();
             }
         }
+        // 根据所有actions设置布局参数（scrollView宽度，使其能够滑动）
         RelativeLayout.LayoutParams cellContainerParams
                 = new RelativeLayout.LayoutParams(getWidth() + actionWidth, cellHeight);// 使用等同于控件的宽度，用户设置的高度
         cellContainerView.setLayoutParams(cellContainerParams);
+        //  设置actions相关-结束
 
         RelativeLayout.LayoutParams cellSizeParams
                 = new RelativeLayout.LayoutParams(getWidth(), cellHeight);// 使用等同于控件的宽度，用户设置的高度
@@ -225,6 +232,7 @@ public class LKUITableView extends ScrollView {
         cellContainerView.addView(cellContentView);
         contentView.addView(scrollView);
         cellScrollContainerPool.put(indexPath, scrollView);
+        return cell;
     }
 
     /**
@@ -296,7 +304,7 @@ public class LKUITableView extends ScrollView {
      */
     private void scrollIntoScreen(Integer index, String pathInfo) {
         System.out.println("----> IN" + pathInfo);
-        initLineWithPathInfoString(index);// 要显示这个行了，现在初始化这个行
+        initLineWithRecorderItemIndex(index);// 要显示这个行了，现在初始化这个行
     }
 
     /**
@@ -307,6 +315,7 @@ public class LKUITableView extends ScrollView {
         LKIndexPath indexPath = getIndexPathWithPathInfoString(pathInfo);
         if (indexPath != null && indexPath.equals(slidedCell))// 移除屏幕的cell要关闭侧滑
             closeCurrentSlide();
+//        this.removeView(dataSource.cellForRowAtIndexPath(this,indexPath));// 从当前试图中移除控件
     }
 
     /**
@@ -338,11 +347,15 @@ public class LKUITableView extends ScrollView {
         Integer startLocation = spaceOfLocation(0);
         Integer endLocation = spaceOfLocation(getHeight());
         for (int i = startLocation; i <= endLocation; i++) {
-            initLineWithPathInfoString(i);
+            initLineWithRecorderItemIndex(i);
         }
     }
 
-    public void initLineWithPathInfoString(Integer recorderItemIndex) {
+    /**
+     * 初始化行通过pathInfo字符串
+     * @param recorderItemIndex 记录索引
+     */
+    public void initLineWithRecorderItemIndex(Integer recorderItemIndex) {
         String pathInfo = typeRecorder.get(recorderItemIndex);
         String[] items = pathInfo.split("_");
         switch (items[0]) {
@@ -358,40 +371,6 @@ public class LKUITableView extends ScrollView {
                         delegate.heightForRowAtIndexPath(this, indexPath),
                         startLocationRecorder.get(recorderItemIndex));// 初始化cell行控件
         }
-    }
-
-    /**
-     * 数据源接口
-     */
-    public interface DataSource {
-        // required
-        Integer numberOfRowsInSection(LKUITableView tableView, Integer section);
-
-        LKUITableViewCell cellForRowAtIndexPath(LKUITableView tableView, LKIndexPath indexPath);
-
-        // optional
-        Integer numberOfSectionsInTableView(LKUITableView tableView);
-
-        String titleForHeaderInSection(LKUITableView tableView, Integer section);
-
-        String titleForFooterInSection(LKUITableView tableView, Integer section);
-
-    }
-
-    /**
-     * 代理接口
-     */
-    public interface Delegate {
-        // Variable height support
-        Integer heightForRowAtIndexPath(LKUITableView tableView, LKIndexPath indexPath);
-
-        Integer heightForHeaderInSection(LKUITableView tableView, Integer section);
-
-        Integer heightForFooterInSection(LKUITableView tableView, Integer section);
-
-        void didSelectRowAtIndexPath(LKUITableView tableView, LKIndexPath indexPath);
-
-        List<LKUITableViewRowAction> editActionsForRowAtIndexPath(LKUITableView tableView, LKIndexPath indexPath);
     }
 
 }

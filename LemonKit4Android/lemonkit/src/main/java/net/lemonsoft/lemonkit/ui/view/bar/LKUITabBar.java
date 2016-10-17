@@ -1,4 +1,4 @@
-package net.lemonsoft.lemonkit.ui.view;
+package net.lemonsoft.lemonkit.ui.view.bar;
 
 /**
  * Created by LiuRi on 16/8/3.
