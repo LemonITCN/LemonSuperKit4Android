@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
@@ -39,10 +40,15 @@ public class LKUITableView extends ScrollView {
     private List<Integer> startLocationRecorder;// 起始位置记录表
 
     private HashMap<LKIndexPath, HorizontalScrollView> cellScrollContainerPool;// cell的scrollView缓存池
-    private HashMap<String, ArrayList<LKUITableViewCell>> reusePool;// 复用机制池
-    private HashMap<String, LKUITableViewCell> frontCellPool;// 正在显示的tableViewCell池
+    private HashMap<String, LKUITableViewCell> frontCellPool;// 正在显示的cell的父View池
 
-    private RelativeLayout contentView;
+    private RelativeLayout contentView;// 正文控件，实际所有的cell都放到这个view中
+
+    ///// 复用机制池 -- 开始
+
+    private HashMap<String, ArrayList<LKUITableViewCell>> reuseCellPool;// cell复用机制池
+
+    ///// 复用机制池 -- 结束
 
     private boolean autoRun = true;
 
@@ -57,9 +63,12 @@ public class LKUITableView extends ScrollView {
         typeRecorder = new HashMap<>();// 创建一个y坐标记录池
         startLocationRecorder = new ArrayList<>();// 创建一个y底部坐标记录池
         cellScrollContainerPool = new HashMap<>();// 创建一个根据LKIndexPath索引cellScrollView的池
-        reusePool = new HashMap<>();// 初始化复用机制池
         frontCellPool = new HashMap<>();// 创建前端正在显示的cell的存储池
         this.addView(this.contentView);
+
+        //// 复用机制pool创建
+        reuseCellPool = new HashMap<>();// cell复用pool
+        //// 复用机制pool创建结束
     }
 
     @Override
@@ -202,6 +211,7 @@ public class LKUITableView extends ScrollView {
                 return false;
             }
         });
+        // 处理记录当前哪条cell正在侧滑
         scrollView.setOnScrollListener(new LKHorizontalScrollView.ScrollListener() {
             @Override
             public void onScroll(int l, int t, int oldl, int oldt) {
@@ -228,10 +238,10 @@ public class LKUITableView extends ScrollView {
         LKUITableViewCell cell = dataSource.cellForRowAtIndexPath(this, indexPath);
         cell.setLayoutParams(cellSizeParams);
         cellContentView.addView(cell);// 把LKTableViewCell控件实际放入到contentView中显示
-
         cellContainerView.addView(cellContentView);
-        contentView.addView(scrollView);
+        contentView.addView(scrollView);// 把cell添加到整个显示区的容器view中
         cellScrollContainerPool.put(indexPath, scrollView);
+        frontCellPool.put(getCellPathInfoStringWithIndexPath(indexPath), cell);// 放到正在显示的池中
         return cell;
     }
 
@@ -275,6 +285,9 @@ public class LKUITableView extends ScrollView {
     private int lastScrollY = 0;
 
     @Override
+    /**
+     * 整个tableView滑动的回调函数，用来动态计算哪些元素滚入滚出，复用机制调用
+     */
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
         int currentTopIndex = spaceOfLocation(t);
@@ -303,7 +316,7 @@ public class LKUITableView extends ScrollView {
      * 滚动进入屏幕
      */
     private void scrollIntoScreen(Integer index, String pathInfo) {
-        System.out.println("----> IN" + pathInfo);
+//        System.out.println("----> IN" + pathInfo);
         initLineWithRecorderItemIndex(index);// 要显示这个行了，现在初始化这个行
     }
 
@@ -311,11 +324,25 @@ public class LKUITableView extends ScrollView {
      * 滚出屏幕
      */
     private void scrollOutScreen(Integer index, String pathInfo) {
-        System.out.println("----> OUT" + pathInfo);
-        LKIndexPath indexPath = getIndexPathWithPathInfoString(pathInfo);
-        if (indexPath != null && indexPath.equals(slidedCell))// 移除屏幕的cell要关闭侧滑
-            closeCurrentSlide();
-//        this.removeView(dataSource.cellForRowAtIndexPath(this,indexPath));// 从当前试图中移除控件
+        if (pathInfo.startsWith("c"))
+            System.out.println("----> OUT" + pathInfo);
+        if (pathInfo.startsWith("c")) { // 移出去屏幕的是cell
+            LKIndexPath indexPath = getIndexPathWithPathInfoString(pathInfo);
+            if (indexPath != null && indexPath.equals(slidedCell))// 移除屏幕的cell要关闭侧滑
+                closeCurrentSlide();// 关闭当前侧滑的cell
+            // cell -> cellContentView -> cellContainerView -> scrollView
+            LKUITableViewCell cell = frontCellPool.get(pathInfo);
+            if (cell != null) {// 不是null
+                this.contentView.removeView((View) cell.getParent().getParent().getParent());// 从当前视图中移除控件
+                ((ViewGroup) cell.getParent()).removeView(cell);
+                if (!reuseCellPool.containsKey(cell.getReuseIdentifier()) ||
+                        reuseCellPool.get(cell.getReuseIdentifier()) == null)// 没有这个服用标识或者不存在list
+                    reuseCellPool.put(cell.getReuseIdentifier(), new ArrayList<LKUITableViewCell>());// 那么重新创建一个list放到复用池中
+                if (cell.getReuseIdentifier() != null)// 存在复用标识
+                    reuseCellPool.get(cell.getReuseIdentifier()).add(frontCellPool.get(pathInfo));// 把cell放到复用池中
+            }
+            frontCellPool.remove(pathInfo);// 从控件存储池中移除
+        }
     }
 
     /**
@@ -341,7 +368,17 @@ public class LKUITableView extends ScrollView {
     }
 
     /**
-     * 获取当前屏幕正在显示的
+     * 根据LKIndexPath计算PathInfo字符串
+     *
+     * @param indexPath indexPath路径信息
+     * @return PathInfo字符串
+     */
+    public String getCellPathInfoStringWithIndexPath(LKIndexPath indexPath) {
+        return String.format("c_%d_%d", indexPath.section, indexPath.row);
+    }
+
+    /**
+     * 获取当前屏幕正在显示的所有项目
      */
     public void getScreenRangeItems() {
         Integer startLocation = spaceOfLocation(0);
@@ -353,6 +390,7 @@ public class LKUITableView extends ScrollView {
 
     /**
      * 初始化行通过pathInfo字符串
+     *
      * @param recorderItemIndex 记录索引
      */
     public void initLineWithRecorderItemIndex(Integer recorderItemIndex) {
@@ -372,5 +410,28 @@ public class LKUITableView extends ScrollView {
                         startLocationRecorder.get(recorderItemIndex));// 初始化cell行控件
         }
     }
+
+
+    //// 复用机制方法 - 开始
+
+    /**
+     * 根据复用标识从复用池中取cell
+     *
+     * @param identifier 复用标识字符串
+     * @return 复用池中存储的对应cell
+     */
+    public LKUITableViewCell dequeueReusableCellWithIdentifier(String identifier) {
+        if (reuseCellPool.containsKey(identifier) &&
+                reuseCellPool.get(identifier) != null &&
+                reuseCellPool.get(identifier).size() > 0) {
+            LKUITableViewCell cell = reuseCellPool.get(identifier).get(0);
+            reuseCellPool.remove(identifier).remove(0);// 从复用池中移除
+            return cell;
+        }
+        System.out.println(" ERRRR: " + identifier);
+        return null;
+    }
+
+    //// 复用机制方法 - 结束
 
 }

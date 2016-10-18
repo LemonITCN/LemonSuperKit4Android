@@ -56,11 +56,15 @@ public class TableViewTestActivity extends LKUIRoot {
 
             @Override
             public LKUITableViewCell cellForRowAtIndexPath(LKUITableView tableView, LKIndexPath indexPath) {
-                LKUITableViewCell cell = new LKUITableViewCell(TableViewTestActivity.this);
-                cell.setBackgroundColor(Color.argb(255, 255 / 56 * indexPath.row, 255 / 40 * indexPath.row, 255 / 50 * indexPath.row));
+                String identifier = String.format("%d_%d", indexPath.section, indexPath.row);
+                LKUITableViewCell cell = tableView.dequeueReusableCellWithIdentifier(identifier);
+                if (cell == null) {// 复用机制里面没有，新创建
+                    cell = new LKUITableViewCell(TableViewTestActivity.this , identifier);
+                    cell.setBackgroundColor(Color.argb(255, (int) (Math.random() * 255.0), (int) (Math.random() * 255.0), (int) (Math.random() * 255.0)));
+                }
                 if (indexPath.row == 0) {
                     cell.removeAllViews();
-                    cell.addView(view);
+//                    cell.addView(view);
                 }
                 return cell;
             }
