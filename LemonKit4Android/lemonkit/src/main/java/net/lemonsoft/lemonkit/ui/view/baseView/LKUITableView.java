@@ -421,14 +421,17 @@ public class LKUITableView extends ScrollView {
      * @return 复用池中存储的对应cell
      */
     public LKUITableViewCell dequeueReusableCellWithIdentifier(String identifier) {
+        System.out.println(" ---> time from : " + System.currentTimeMillis());
         if (reuseCellPool.containsKey(identifier) &&
                 reuseCellPool.get(identifier) != null &&
                 reuseCellPool.get(identifier).size() > 0) {
             LKUITableViewCell cell = reuseCellPool.get(identifier).get(0);
             reuseCellPool.remove(identifier).remove(0);// 从复用池中移除
+            System.out.println(" ---> time to : " + System.currentTimeMillis());
             return cell;
         }
         System.out.println(" ERRRR: " + identifier);
+        System.out.println(" ---> time to : " + System.currentTimeMillis());
         return null;
     }
 

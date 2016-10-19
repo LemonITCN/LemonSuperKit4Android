@@ -19,13 +19,9 @@ import net.lemonsoft.lemonkit.ui.view.baseView.LKUIView;
 
 public class TableViewTestActivity extends LKUIRoot {
 
-    LKUIView view;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        view = new LKUIView(TableViewTestActivity.this);
 
         RelativeLayout relativeLayout = new RelativeLayout(this);
         relativeLayout.setX(0);
@@ -43,8 +39,6 @@ public class TableViewTestActivity extends LKUIRoot {
             @Override
             public void didSelectRowAtIndexPath(LKUITableView tableView, LKIndexPath indexPath) {
                 System.out.println("卧槽，被点急了：" + indexPath.section + " r : " + indexPath.row);
-                if (indexPath.row == 0)
-                    view.setBorderWidth(1);
             }
         };
 

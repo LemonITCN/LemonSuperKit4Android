@@ -8,7 +8,7 @@ import android.view.WindowManager;
  * 工具类 - 尺寸相关
  * Created by 1em0nsOft on 16/9/7.
  */
-public class SizeUtil {
+public class  SizeUtil {
 
     private static WindowManager manager;
     private static DisplayMetrics displayMetrics;
