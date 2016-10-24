@@ -1,6 +1,7 @@
 package net.lemonsoft.lemonkit4android.example;
 
 import android.app.Activity;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.RelativeLayout;
@@ -63,5 +64,7 @@ public class TableViewTestActivity extends LKUIRoot {
                 return cell;
             }
         };
+
+
     }
 }
