@@ -12,7 +12,7 @@ import net.lemonsoft.lemonkit.core_graphics.CGRect;
 public class UIButton extends UIControl {
 
     public UIButton(CGRect frame) {
-        super(frame);
+        super(Button.class, frame);
     }
 
     public UIButton() {

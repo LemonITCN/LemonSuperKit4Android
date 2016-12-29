@@ -22,4 +22,8 @@ public class UIControl extends UIView {
         super(viewClass);
     }
 
+    public UIControl(Class viewClass, CGRect frame) {
+        super(viewClass, frame);
+    }
+
 }

@@ -75,6 +75,17 @@ public class UIView extends RelativeLayout {
     }
 
     /**
+     * 子类通过此构造方法把基础的AndroidView控件封装成LemonKit的UIView子控件,并直接设置frame
+     *
+     * @param viewClass androidView控件
+     * @param frame     控件的矩形信息
+     */
+    protected UIView(Class viewClass, CGRect frame) {
+        this(viewClass);
+        setFrame(frame);
+    }
+
+    /**
      * 获取当前视图的矩形信息
      *
      * @return 矩形信息
