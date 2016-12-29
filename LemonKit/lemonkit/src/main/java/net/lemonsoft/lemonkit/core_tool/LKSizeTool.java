@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import net.lemonsoft.lemonkit.core_graphics.CGRect;
+
 /**
  * LemonKit工具类 - 尺寸相关工具
  * Created by LiuRi on 2016/12/23.
@@ -16,7 +18,7 @@ public class LKSizeTool {
 
     private static LKSizeTool _privateSizeTool;
 
-    public static synchronized LKSizeTool getPrivateSizeTool() {
+    public static synchronized LKSizeTool getDefaultSizeTool() {
         if (_privateSizeTool == null)
             _privateSizeTool = new LKSizeTool();
         return _privateSizeTool;
@@ -26,26 +28,6 @@ public class LKSizeTool {
         _density = context.getResources().getDisplayMetrics().density;
         _metrics = new DisplayMetrics();
         ((WindowManager) (context.getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay().getMetrics(_metrics);
-    }
-
-    /**
-     * 换算dp到px
-     *
-     * @param dpValue dp的数值
-     * @return 对应的px数值
-     */
-    public int dpToPx(int dpValue) {
-        return (int) (_density * dpValue + 0.5f);
-    }
-
-    /**
-     * 换算px到dp
-     *
-     * @param pxValue px的数值
-     * @return 对应的dp数值
-     */
-    public int pxToDp(int pxValue) {
-        return (int) (pxValue / _density + 0.5f);
     }
 
     /**
@@ -75,17 +57,7 @@ public class LKSizeTool {
      * @return
      */
     public int DP(float dpValue) {
-        return pxToDp(dpValue);
-    }
-
-    /**
-     * DP值，实际就是把数值当做DP来换算成PX返回
-     *
-     * @param dpValue DP的值
-     * @return
-     */
-    public int DP(int dpValue) {
-        return pxToDp(dpValue);
+        return dpToPx(dpValue);
     }
 
     /**
@@ -104,6 +76,15 @@ public class LKSizeTool {
      */
     public int screenHeightDp() {
         return pxToDp(_metrics.heightPixels);
+    }
+
+    /**
+     * 获取屏幕的矩形信息，单位DP
+     *
+     * @return 屏幕的矩形信息
+     */
+    public CGRect screenFrame() {
+        return CGRect.make(0, 0, screenWidthDp(), screenHeightDp());
     }
 
 }

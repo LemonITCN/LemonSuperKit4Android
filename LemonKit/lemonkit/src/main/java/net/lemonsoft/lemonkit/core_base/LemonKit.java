@@ -41,7 +41,7 @@ public class LemonKit {
     public void init(Application application) {
         this.application = application;
         // 初始化LemonKit尺寸工具类
-        LKSizeTool.getPrivateSizeTool().setContext(this.getAppContext());
+        LKSizeTool.getDefaultSizeTool().setContext(this.getAppContext());
     }
 
     /**

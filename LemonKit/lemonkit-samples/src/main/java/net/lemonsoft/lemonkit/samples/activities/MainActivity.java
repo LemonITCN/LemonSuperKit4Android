@@ -1,23 +1,26 @@
 package net.lemonsoft.lemonkit.samples.activities;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-public class MainActivity extends Activity {
+import net.lemonsoft.lemonkit.core_graphics.CGRect;
+import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIButton;
+import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;
+import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view_controller.UIViewController;
+
+public class MainActivity extends UIViewController {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        RelativeLayout relativeLayout = new RelativeLayout(getApplicationContext());
-//        setContentView(R.layout.activity_main);
-        setContentView(relativeLayout);
-        TextView textView = new TextView(getApplicationContext());
-        textView.setBackgroundColor(Color.RED);
-        textView.setLayoutParams(new RelativeLayout.LayoutParams(300, 300));
-        relativeLayout.addView(textView);
+    public void viewDidLoad() {
+        super.viewDidLoad();
+        UIView view = new UIView();
+        view.setFrame(CGRect.make(100, 100, 100, 100));
+        this.view.addSubView(view);
+        view.setBackgroundColor(Color.RED);
 
+        UIButton button = new UIButton();
+        button.setFrame(CGRect.make(0, 0, 50, 50));
+        this.view.addSubView(button);
     }
+
 }
