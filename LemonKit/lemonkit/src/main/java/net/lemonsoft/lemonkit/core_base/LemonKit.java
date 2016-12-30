@@ -3,7 +3,7 @@ package net.lemonsoft.lemonkit.core_base;
 import android.app.Application;
 import android.content.Context;
 
-import net.lemonsoft.lemonkit.core_tool.LKSizeTool;
+import net.lemonsoft.lemonkit.core_native_tool.LKSizeTool;
 
 /**
  * LemonKit核心类

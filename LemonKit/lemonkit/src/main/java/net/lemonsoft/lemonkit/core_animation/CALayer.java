@@ -1,17 +1,9 @@
 package net.lemonsoft.lemonkit.core_animation;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RoundRectShape;
-import android.graphics.drawable.shapes.Shape;
-import android.os.Build;
 
-import net.lemonsoft.lemonkit.core_graphics.CGColorRef;
-import net.lemonsoft.lemonkit.core_tool.LKColorTool;
-import net.lemonsoft.lemonkit.core_tool.LKSizeTool;
+import net.lemonsoft.lemonkit.core_native_tool.LKColorTool;
+import net.lemonsoft.lemonkit.core_native_tool.LKSizeTool;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;
 
 /**

@@ -1,4 +1,4 @@
-package net.lemonsoft.lemonkit.core_tool;
+package net.lemonsoft.lemonkit.core_native_tool;
 
 import android.content.Context;
 import android.util.DisplayMetrics;

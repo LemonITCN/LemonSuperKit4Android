@@ -1,4 +1,4 @@
-package net.lemonsoft.lemonkit.core_tool;
+package net.lemonsoft.lemonkit.core_native_tool;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;

@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 
 import net.lemonsoft.lemonkit.core_graphics.CGColorRef;
-import net.lemonsoft.lemonkit.core_tool.LKColorTool;
+import net.lemonsoft.lemonkit.core_native_tool.LKColorTool;
 
 /**
  * LemonKit颜色描述对象

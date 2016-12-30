@@ -1,4 +1,4 @@
-package net.lemonsoft.lemonkit.core_base.model;
+package net.lemonsoft.lemonkit.core_native_model;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -100,6 +100,7 @@ public class LKViewAppearanceInfoModel {
     }
 
     public Drawable createDrawable() {
+        Drawable[] drawables = new Drawable[2];
         LayerDrawable layerDrawable = new LayerDrawable(new Drawable[5]);
         return layerDrawable;
     }
