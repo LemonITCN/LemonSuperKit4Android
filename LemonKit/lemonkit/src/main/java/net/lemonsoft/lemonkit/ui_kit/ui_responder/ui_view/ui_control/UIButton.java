@@ -9,7 +9,7 @@ import net.lemonsoft.lemonkit.core_graphics.CGRect;
  * Created by LiuRi on 2016/12/28.
  */
 
-public class UIButton extends UIControl {
+public class UIButton extends UIControl<Button> {
 
     public UIButton(CGRect frame) {
         super(Button.class, frame);

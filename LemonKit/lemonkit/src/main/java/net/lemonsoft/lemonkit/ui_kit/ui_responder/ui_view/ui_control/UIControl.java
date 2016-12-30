@@ -1,6 +1,8 @@
 package net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.ui_control;
 
 
+import android.widget.TextView;
+
 import net.lemonsoft.lemonkit.core_graphics.CGRect;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;
 
@@ -9,7 +11,7 @@ import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;
  * Created by LiuRi on 2016/12/29.
  */
 
-public class UIControl extends UIView {
+public class UIControl<T> extends UIView<T> {
 
     public UIControl() {
     }

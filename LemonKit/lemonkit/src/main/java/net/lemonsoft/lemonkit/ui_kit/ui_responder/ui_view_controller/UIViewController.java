@@ -3,6 +3,7 @@ package net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view_controller;
 import android.app.Activity;
 import android.os.Bundle;
 
+import net.lemonsoft.lemonkit.ui_kit.UIColor;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;
 
 /**
@@ -18,6 +19,7 @@ public class UIViewController extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.view = new UIView();
+        this.view.setBackgroundColor(UIColor.whiteColor());
         setContentView(this.view);
         viewDidLoad();
     }

@@ -1,24 +1,26 @@
 package net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import net.lemonsoft.lemonkit.core_animation.CALayer;
 import net.lemonsoft.lemonkit.core_base.LemonKit;
 import net.lemonsoft.lemonkit.core_graphics.CGRect;
 import net.lemonsoft.lemonkit.core_graphics.CGSize;
 import net.lemonsoft.lemonkit.core_tool.LKSizeTool;
 import net.lemonsoft.lemonkit.core_tool.LKViewAppearanceTool;
+import net.lemonsoft.lemonkit.ui_kit.UIColor;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * 视图控件，LemonKit中所有视图控件的父类
  * Created by LiuRi on 2016/12/28.
  */
 
-public class UIView extends RelativeLayout {
+public class UIView<T> extends RelativeLayout {
 
     /**
      * LemonKit核心对象
@@ -38,6 +40,14 @@ public class UIView extends RelativeLayout {
      * 实际的内容控件
      */
     protected View _rView;
+    /**
+     * 控件背景颜色存储控件
+     */
+    private UIColor _backgroundColor;
+    /**
+     * 高级视图操作属性
+     */
+    public CALayer layer = new CALayer(this);
 
     /**
      * 父层控件
@@ -46,6 +56,7 @@ public class UIView extends RelativeLayout {
 
     public UIView() {
         super(LemonKit.instance().getAppContext());
+        commonInit();// 调用公共初始化方法
     }
 
     /**
@@ -83,6 +94,31 @@ public class UIView extends RelativeLayout {
     protected UIView(Class viewClass, CGRect frame) {
         this(viewClass);
         setFrame(frame);
+    }
+
+    /**
+     * 获取实际显示的控件
+     *
+     * @return 实际显示的控件View对象
+     */
+    public View get_rView() {
+        return get_rView();
+    }
+
+    /**
+     * 初始化，所有的构造方法都要调用此函数
+     */
+    private void commonInit() {
+        setBackgroundColor(new UIColor(0, 1, 1, 1));
+    }
+
+    /**
+     * 获取真实显示内容的控件，getRealView
+     *
+     * @return 真实显示内容的视图对象
+     */
+    protected T _gRV() {
+        return (T) _rView;
     }
 
     /**
@@ -188,7 +224,34 @@ public class UIView extends RelativeLayout {
         _VAT.setSize(this, width, height);
     }
 
-//    /**
+    /**
+     * 设置背景颜色
+     *
+     * @param color LemonKit背景颜色对象
+     */
+    public void setBackgroundColor(UIColor color) {
+        _backgroundColor = color;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            this.setBackground(color.getDRB());
+            if (_rView != null)
+                _rView.setBackground(color.getDRB());
+        } else {
+            this.setBackgroundDrawable(color.getDRB());
+            if (_rView != null)
+                _rView.setBackgroundDrawable(color.getDRB());
+        }
+    }
+
+    /**
+     * 获取控件的背景颜色对象
+     *
+     * @return UIColor颜色描述对象
+     */
+    public UIColor getBackgroundColor() {
+        return _backgroundColor;
+    }
+
+    //    /**
 //     * 设置布局参数，其中设置的宽高等信息单位为DP
 //     *
 //     * @param params 布局参数对象

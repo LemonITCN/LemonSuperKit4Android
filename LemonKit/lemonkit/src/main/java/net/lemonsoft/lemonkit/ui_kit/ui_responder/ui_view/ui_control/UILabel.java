@@ -11,16 +11,12 @@ import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;
  * Created by lemonsoft on 2016/12/29.
  */
 
-public class UILabel extends UIView {
+public class UILabel extends UIView<TextView> {
 
     /**
      * 当前标签显示的字体
      */
     private UIFont font;
-
-    private TextView _get() {
-        return (TextView) _rView;
-    }
 
     public UILabel() {
         super(TextView.class);
@@ -39,11 +35,11 @@ public class UILabel extends UIView {
     }
 
     public void setText(String text) {
-        _get().setText(text);
+        _gRV().setText(text);
     }
 
     public String getText() {
-        return _get().getText().toString();
+        return _gRV().getText().toString();
     }
 
 }

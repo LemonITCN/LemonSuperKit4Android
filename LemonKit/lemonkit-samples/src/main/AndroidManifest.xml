@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainViewController">
+        <activity android:name=".view_controller.MainViewController">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
