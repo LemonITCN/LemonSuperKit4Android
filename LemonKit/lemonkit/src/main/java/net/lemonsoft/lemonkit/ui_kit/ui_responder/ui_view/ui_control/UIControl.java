@@ -1,8 +1,6 @@
 package net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.ui_control;
 
 
-import android.widget.TextView;
-
 import net.lemonsoft.lemonkit.core_graphics.CGRect;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;
 
