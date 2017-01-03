@@ -57,6 +57,11 @@ public class LKViewAppearanceInfoModel {
      */
     private CGRect frame = CGRect.make(0, 0, 0, 0);
 
+    /**
+     * 尺寸控件类
+     */
+    protected final LKSizeTool _ST = LKSizeTool.getDefaultSizeTool();
+
     public LKViewAppearanceInfoModel() {
 
     }
@@ -132,14 +137,15 @@ public class LKViewAppearanceInfoModel {
         Drawable[] drawables = new Drawable[1];
         if (backgroundColor.getDrawable() instanceof ColorDrawable) {
             // 纯背景颜色，UIColor是通过颜色创建的（后期支持通过图片创建背景颜色）
-            int realRadius = LKSizeTool.getDefaultSizeTool().DP(cornerRadius);
-            int borderWidth = 0;// 加边框后会出现空心圆角矩形的效果，所以设置为0
+            int realRadius = _ST.DP(this.cornerRadius);
+            int borderWidth = _ST.DP(this.borderWidth);// 加边框后会出现空心圆角矩形的效果，所以设置为0
             float[] outerRadius = new float[8];
             float[] innerRadius = new float[8];
             for (int i = 0; i < 8; i++) {
                 outerRadius[i] = realRadius + borderWidth;
                 innerRadius[i] = realRadius;
             }
+            ShapeDrawable shapeDrawable1 = new ShapeDrawable();
             ShapeDrawable shapeDrawable = // 创建图形drawable
                     new ShapeDrawable(
                             // 创建圆角矩形

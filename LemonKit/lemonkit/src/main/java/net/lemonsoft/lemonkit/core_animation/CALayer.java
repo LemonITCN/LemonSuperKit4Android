@@ -79,6 +79,16 @@ public class CALayer {
     }
 
     /**
+     * 设置控件的边框线的宽度
+     *
+     * @param width 控件的圆角半径
+     */
+    public void setBorderWidth(float width) {
+        _appearance.setBorderWidth(width);
+        applyAppearance();// 应用外观
+    }
+
+    /**
      * 根据所有设置把设置的样式应用到控件之上
      */
     private void applyAppearance() {
