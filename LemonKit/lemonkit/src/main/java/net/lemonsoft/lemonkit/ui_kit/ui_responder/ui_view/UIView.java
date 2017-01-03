@@ -1,7 +1,10 @@
 package net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view;
 
 import android.content.Context;
-import android.os.Build;
+import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.RectF;
+import android.graphics.Region;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -14,6 +17,7 @@ import net.lemonsoft.lemonkit.core_native_tool.LKViewAppearanceTool;
 import net.lemonsoft.lemonkit.ui_kit.UIColor;
 
 import java.lang.reflect.Constructor;
+import java.util.regex.Pattern;
 
 /**
  * 视图控件，LemonKit中所有视图控件的父类
@@ -37,6 +41,10 @@ public class UIView<T> extends RelativeLayout {
      */
     protected CGRect frame = new CGRect(0f, 0f, 0f, 0f);
     /**
+     * 超过应显示区域的部分截断
+     */
+    private boolean clipsToBounds = false;
+    /**
      * 实际的内容控件
      */
     protected View _rView;
@@ -48,7 +56,6 @@ public class UIView<T> extends RelativeLayout {
      * 高级视图操作属性
      */
     public CALayer layer = new CALayer(this);
-
     /**
      * 父层控件
      */
@@ -190,6 +197,12 @@ public class UIView<T> extends RelativeLayout {
         refresh();
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        layer.onDraw(canvas);
+    }
+
     /**
      * 设置控件的尺寸
      *
@@ -230,16 +243,7 @@ public class UIView<T> extends RelativeLayout {
      * @param color LemonKit背景颜色对象
      */
     public void setBackgroundColor(UIColor color) {
-        _backgroundColor = color;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            this.setBackground(color.getDRB());
-            if (_rView != null)
-                _rView.setBackground(color.getDRB());
-        } else {
-            this.setBackgroundDrawable(color.getDRB());
-            if (_rView != null)
-                _rView.setBackgroundDrawable(color.getDRB());
-        }
+        this.layer.setBackgroundColor(color);
     }
 
     /**
@@ -250,21 +254,6 @@ public class UIView<T> extends RelativeLayout {
     public UIColor getBackgroundColor() {
         return _backgroundColor;
     }
-
-    //    /**
-//     * 设置布局参数，其中设置的宽高等信息单位为DP
-//     *
-//     * @param params 布局参数对象
-//     */
-//    @Override
-//    public void setLayoutParams(ViewGroup.LayoutParams params) {
-//        this.frame.size.width = params.width;
-//        this.frame.size.height = params.height;
-//        params.width = _ST.DP(params.width);
-//        params.height = _ST.DP(params.height);
-//        super.setLayoutParams(params);
-//        refresh();
-//    }
 
     /**
      * 刷新布局
@@ -288,5 +277,15 @@ public class UIView<T> extends RelativeLayout {
     public void set_superView(UIView _superView) {
         this._superView = _superView;
     }
+
+    public boolean isClipsToBounds() {
+        return clipsToBounds;
+    }
+
+    public void setClipsToBounds(boolean clipsToBounds) {
+        this.clipsToBounds = clipsToBounds;
+        this.layer.setMasksToBounds(clipsToBounds);
+    }
+
     // ......无特殊要求的getter 、setter方法结束
 }

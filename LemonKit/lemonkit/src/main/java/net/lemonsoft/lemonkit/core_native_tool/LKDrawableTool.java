@@ -32,15 +32,14 @@ public class LKDrawableTool {
      * @param drawable 要绘制成bitmap的drawable
      * @return 绘制完毕的bitmap对象
      */
-    public Bitmap drawableToBitamp(Drawable drawable) {
+    public Bitmap drawableToBitmap(Drawable drawable) {
         int w = drawable.getIntrinsicWidth();
         int h = drawable.getIntrinsicHeight();
-        System.out.println("Drawable转Bitmap");
         Bitmap.Config config =
                 drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
                         : Bitmap.Config.RGB_565;
         Bitmap bitmap = Bitmap.createBitmap(w, h, config);
-        //注意，下面三行代码要用到，否在在View或者surfaceview里的canvas.drawBitmap会看不到图
+        //注意，下面三行代码要用到，否在在View或者SurfaceView里的canvas.drawBitmap会看不到图
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, w, h);
         drawable.draw(canvas);

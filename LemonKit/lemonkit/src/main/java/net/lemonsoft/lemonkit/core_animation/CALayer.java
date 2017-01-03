@@ -1,9 +1,15 @@
 package net.lemonsoft.lemonkit.core_animation;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Canvas;
+import android.graphics.Path;
+import android.graphics.RectF;
+import android.graphics.Region;
+import android.os.Build;
 
+import net.lemonsoft.lemonkit.core_native_model.LKViewAppearanceInfoModel;
 import net.lemonsoft.lemonkit.core_native_tool.LKColorTool;
 import net.lemonsoft.lemonkit.core_native_tool.LKSizeTool;
+import net.lemonsoft.lemonkit.ui_kit.UIColor;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;
 
 /**
@@ -26,23 +32,40 @@ public class CALayer {
      * 所归属的控件
      */
     private UIView _v;
-
-
+    /**
+     * 外观样式，例如圆角、边框等
+     */
+    private LKViewAppearanceInfoModel _appearance;
+    /**
+     * 超过边界之外的内容是否隐藏
+     */
+    private boolean masksToBounds = false;
 
     public CALayer(UIView view) {
         _v = view;
+        _appearance = new LKViewAppearanceInfoModel();
     }
 
-    public void setBackground(Drawable drb) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//            _v.setBackground(drb);
-//            if (_v.get_rView() != null)
-//                _v.get_rView().setBackground(LKColorTool.getDefaultColorTool().);
-//        } else {
-//            _v.get_rView().setBackgroundDrawable(_CT.colorWithDrawable(drb));
-//            if (_v.get_rView() != null)
-//                _v.get_rView().setBackgroundDrawable(color.getDRB());
-//        }
+    public void setBackgroundColor(UIColor color) {
+        _appearance.setBackgroundColor(color);
+        applyAppearance();
+    }
+
+    public void onDraw(Canvas canvas) {
+        if (this.masksToBounds) {
+            // 需要剪切应显示视图的其余部分
+            Path path = new Path();
+            path.addRoundRect(
+                    new RectF(0, 0, _ST.DP(
+                            _v.getFrame().size.width),
+                            _ST.DP(_v.getFrame().size.height)
+                    ),
+                    _ST.DP(_appearance.getCornerRadius()),
+                    _ST.DP(_appearance.getCornerRadius()),
+                    Path.Direction.CW
+            );
+            canvas.clipPath(path, Region.Op.REPLACE);
+        }
     }
 
     /**
@@ -51,30 +74,29 @@ public class CALayer {
      * @param radius 控件的圆角半径
      */
     public void setCornerRadius(float radius) {
-//        radius = _ST.DP(radius);
-//        int borderWidth = 0;// 加边框后会出现空心圆角矩形的效果，所以设置为0
-//        float[] outerRadius = new float[8];
-//        float[] innerRadius = new float[8];
-//        for (int i = 0; i < 8; i++) {
-//            outerRadius[i] = radius + borderWidth;
-//            innerRadius[i] = radius;
-//        }
-//        Shape shape =
-//        ShapeDrawable shapeDrawable = // 创建图形drawable
-//                new ShapeDrawable(
-//                        // 创建圆角矩形
-//                        new RoundRectShape(outerRadius,
-//                                new RectF(borderWidth, borderWidth, borderWidth, borderWidth),
-//                                innerRadius));
-//        shapeDrawable.getPaint().setColor(_v.getBackgroundColor().cgColor().getColorValue());// 使用指定的颜色绘制，即背景颜色
-//        Drawable drawable;
-//        Canvas canvas;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//            // 高版本SDK使用新的API
-//            _v.setBackground(shapeDrawable);
-//        } else {
-//            _v.setBackgroundDrawable(shapeDrawable);
-//        }
+        _appearance.setCornerRadius(radius);
+        applyAppearance();// 应用外观
     }
 
+    /**
+     * 根据所有设置把设置的样式应用到控件之上
+     */
+    private void applyAppearance() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            // 高版本SDK使用新的API
+            _v.setBackground(_appearance.createDrawable());
+        } else {
+            _v.setBackgroundDrawable(_appearance.createDrawable());
+        }
+    }
+
+
+    public boolean isMasksToBounds() {
+        return masksToBounds;
+    }
+
+    public void setMasksToBounds(boolean masksToBounds) {
+        this.masksToBounds = masksToBounds;
+        _v.postInvalidate();
+    }
 }

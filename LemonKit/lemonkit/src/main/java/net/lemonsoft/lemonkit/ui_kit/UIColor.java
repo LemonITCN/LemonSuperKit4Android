@@ -1,5 +1,6 @@
 package net.lemonsoft.lemonkit.ui_kit;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;

@@ -14,7 +14,9 @@ public class MainViewController extends UIViewController {
         label.setText("Hello! LemonKit World.");
         label.setBackgroundColor(UIColor.greenColor());
         this.view.addSubView(label);
-        label.layer.setCornerRadius(5);
+        label.layer.setCornerRadius(80);
+        label.setClipsToBounds(true);
+        this.view.setBackgroundColor(UIColor.colorWithRedGreenBlueAlpha(0.7f, 0.6f, 0.5f, 0.9f));
     }
 
 }

@@ -34,7 +34,7 @@ public class RoundCornerImageDrawable extends Drawable {
     }
 
     public RoundCornerImageDrawable(Drawable drawable) {
-        this(LKDrawableTool.getDefaultDrawableTool().drawableToBitamp(drawable));
+        this(LKDrawableTool.getDefaultDrawableTool().drawableToBitmap(drawable));
     }
 
     @Override

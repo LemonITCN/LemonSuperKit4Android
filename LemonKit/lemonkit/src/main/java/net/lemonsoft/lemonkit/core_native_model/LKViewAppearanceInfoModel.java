@@ -1,10 +1,20 @@
 package net.lemonsoft.lemonkit.core_native_model;
 
+import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 
+import net.lemonsoft.lemonkit.R;
 import net.lemonsoft.lemonkit.core_graphics.CGColorRef;
+import net.lemonsoft.lemonkit.core_graphics.CGRect;
+import net.lemonsoft.lemonkit.core_native_tool.LKSizeTool;
+import net.lemonsoft.lemonkit.core_native_ui_extension.drawable.RoundCornerImageDrawable;
 import net.lemonsoft.lemonkit.ui_kit.UIColor;
 
 /**
@@ -42,6 +52,25 @@ public class LKViewAppearanceInfoModel {
      * 阴影透明度0-1
      */
     private float shadowOpacity = 1f;
+    /**
+     * 控件的矩形外观
+     */
+    private CGRect frame = CGRect.make(0, 0, 0, 0);
+
+    public LKViewAppearanceInfoModel() {
+
+    }
+
+    private Context context;
+
+    /**
+     * 通过context构造外观描述对象
+     *
+     * @param context 上下文对象
+     */
+    public LKViewAppearanceInfoModel(Context context) {
+        this.context = context;
+    }
 
     public UIColor getBackgroundColor() {
         return backgroundColor;
@@ -100,8 +129,27 @@ public class LKViewAppearanceInfoModel {
     }
 
     public Drawable createDrawable() {
-        Drawable[] drawables = new Drawable[2];
-        LayerDrawable layerDrawable = new LayerDrawable(new Drawable[5]);
+        Drawable[] drawables = new Drawable[1];
+        if (backgroundColor.getDrawable() instanceof ColorDrawable) {
+            // 纯背景颜色，UIColor是通过颜色创建的（后期支持通过图片创建背景颜色）
+            int realRadius = LKSizeTool.getDefaultSizeTool().DP(cornerRadius);
+            int borderWidth = 0;// 加边框后会出现空心圆角矩形的效果，所以设置为0
+            float[] outerRadius = new float[8];
+            float[] innerRadius = new float[8];
+            for (int i = 0; i < 8; i++) {
+                outerRadius[i] = realRadius + borderWidth;
+                innerRadius[i] = realRadius;
+            }
+            ShapeDrawable shapeDrawable = // 创建图形drawable
+                    new ShapeDrawable(
+                            // 创建圆角矩形
+                            new RoundRectShape(outerRadius,
+                                    new RectF(borderWidth, borderWidth, borderWidth, borderWidth),
+                                    innerRadius));
+            shapeDrawable.getPaint().setColor(((ColorDrawable) backgroundColor.getDrawable()).getColor());// 使用指定的颜色绘制，即背景颜色
+            drawables[0] = shapeDrawable;
+        }
+        LayerDrawable layerDrawable = new LayerDrawable(drawables);
         return layerDrawable;
     }
 
