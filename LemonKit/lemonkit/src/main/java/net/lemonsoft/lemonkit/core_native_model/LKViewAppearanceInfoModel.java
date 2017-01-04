@@ -148,23 +148,11 @@ public class LKViewAppearanceInfoModel {
             }
 
             GradientDrawable backDrawable = new GradientDrawable();
-            backDrawable.setShape(GradientDrawable.RECTANGLE);
-            backDrawable.setCornerRadius(_ST.DP(this.cornerRadius));
-            backDrawable.setColor(((ColorDrawable) backgroundColor.getDrawable()).getColor());
-            backDrawable.setStroke(_ST.DP(borderWidth), borderColor.getColorValue());
+            backDrawable.setShape(GradientDrawable.RECTANGLE);// 圆角矩形
+            backDrawable.setCornerRadius(_ST.DP(this.cornerRadius));// 圆角半径设置
+            backDrawable.setColor(((ColorDrawable) backgroundColor.getDrawable()).getColor());// 背景颜色
+            backDrawable.setStroke(_ST.DP(borderWidth), borderColor.getColorValue());// 设置边框宽度和颜色
 
-//            ShapeDrawable shapeDrawable1 = new ShapeDrawable();
-//            RoundRectShape roundRectShape = new RoundRectShape(outerRadius,
-//                    new RectF(borderWidth, borderWidth, borderWidth, borderWidth),
-//                    innerRadius);
-//            ShapeDrawable shapeDrawable = // 创建图形drawable
-//                    new ShapeDrawable(
-//                            // 创建圆角矩形
-//                            new RoundRectShape(outerRadius,
-//                                    new RectF(borderWidth, borderWidth, borderWidth, borderWidth),
-//                                    innerRadius));
-//            shapeDrawable.getPaint().setColor(((ColorDrawable) backgroundColor.getDrawable()).getColor());// 使用指定的颜色绘制，即背景颜色
-//            drawables[0] = shapeDrawable;
             drawables[0] = backDrawable;
         }
         LayerDrawable layerDrawable = new LayerDrawable(drawables);

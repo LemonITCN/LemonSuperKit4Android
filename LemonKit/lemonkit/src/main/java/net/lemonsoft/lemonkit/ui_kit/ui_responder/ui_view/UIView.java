@@ -1,7 +1,9 @@
 package net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view;
 
 import android.content.Context;
+import android.graphics.Camera;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Region;
