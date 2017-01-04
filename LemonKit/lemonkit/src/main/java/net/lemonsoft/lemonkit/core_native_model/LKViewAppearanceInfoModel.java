@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
@@ -145,15 +146,26 @@ public class LKViewAppearanceInfoModel {
                 outerRadius[i] = realRadius + borderWidth;
                 innerRadius[i] = realRadius;
             }
-            ShapeDrawable shapeDrawable1 = new ShapeDrawable();
-            ShapeDrawable shapeDrawable = // 创建图形drawable
-                    new ShapeDrawable(
-                            // 创建圆角矩形
-                            new RoundRectShape(outerRadius,
-                                    new RectF(borderWidth, borderWidth, borderWidth, borderWidth),
-                                    innerRadius));
-            shapeDrawable.getPaint().setColor(((ColorDrawable) backgroundColor.getDrawable()).getColor());// 使用指定的颜色绘制，即背景颜色
-            drawables[0] = shapeDrawable;
+
+            GradientDrawable backDrawable = new GradientDrawable();
+            backDrawable.setShape(GradientDrawable.RECTANGLE);
+            backDrawable.setCornerRadius(_ST.DP(this.cornerRadius));
+            backDrawable.setColor(((ColorDrawable) backgroundColor.getDrawable()).getColor());
+            backDrawable.setStroke(_ST.DP(borderWidth), borderColor.getColorValue());
+
+//            ShapeDrawable shapeDrawable1 = new ShapeDrawable();
+//            RoundRectShape roundRectShape = new RoundRectShape(outerRadius,
+//                    new RectF(borderWidth, borderWidth, borderWidth, borderWidth),
+//                    innerRadius);
+//            ShapeDrawable shapeDrawable = // 创建图形drawable
+//                    new ShapeDrawable(
+//                            // 创建圆角矩形
+//                            new RoundRectShape(outerRadius,
+//                                    new RectF(borderWidth, borderWidth, borderWidth, borderWidth),
+//                                    innerRadius));
+//            shapeDrawable.getPaint().setColor(((ColorDrawable) backgroundColor.getDrawable()).getColor());// 使用指定的颜色绘制，即背景颜色
+//            drawables[0] = shapeDrawable;
+            drawables[0] = backDrawable;
         }
         LayerDrawable layerDrawable = new LayerDrawable(drawables);
         return layerDrawable;

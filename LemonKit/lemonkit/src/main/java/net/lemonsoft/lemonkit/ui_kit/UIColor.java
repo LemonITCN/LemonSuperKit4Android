@@ -61,7 +61,7 @@ public class UIColor {
 
     /**
      * 绿色
-     * #008000
+     * #ff008000
      * 0,128,0
      */
     public static UIColor greenColor() {
@@ -83,7 +83,16 @@ public class UIColor {
      * 0,255,255,255
      */
     public static UIColor clearColor() {
-        return new UIColor(0, 255, 255, 255);
+        return new UIColor(1f, 1f, 1f, 0f);
+    }
+
+    /**
+     * 红色
+     * #ffff0000
+     * 255,255,0,0
+     */
+    public static UIColor redColor() {
+        return new UIColor("#ff0000");
     }
 
     public Drawable getDRB() {

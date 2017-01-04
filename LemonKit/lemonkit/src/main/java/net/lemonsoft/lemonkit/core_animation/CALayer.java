@@ -6,6 +6,7 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
 
+import net.lemonsoft.lemonkit.core_graphics.CGColorRef;
 import net.lemonsoft.lemonkit.core_native_model.LKViewAppearanceInfoModel;
 import net.lemonsoft.lemonkit.core_native_tool.LKColorTool;
 import net.lemonsoft.lemonkit.core_native_tool.LKSizeTool;
@@ -86,6 +87,16 @@ public class CALayer {
     public void setBorderWidth(float width) {
         _appearance.setBorderWidth(width);
         applyAppearance();// 应用外观
+    }
+
+    /**
+     * 设置空间的边框线颜色
+     *
+     * @param color 控件的边框线的颜色
+     */
+    public void setBorderColor(CGColorRef color) {
+        _appearance.setBorderColor(color);
+        applyAppearance();
     }
 
     /**

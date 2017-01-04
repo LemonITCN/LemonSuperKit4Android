@@ -16,7 +16,8 @@ public class MainViewController extends UIViewController {
         this.view.addSubView(label);
         label.layer.setCornerRadius(80);
         label.setClipsToBounds(true);
-        label.layer.setBorderWidth(8);
+        label.layer.setBorderWidth(5);
+        label.layer.setBorderColor(UIColor.redColor().cgColor());
         this.view.setBackgroundColor(UIColor.colorWithRedGreenBlueAlpha(0.7f, 0.6f, 0.5f, 0.9f));
     }
 
