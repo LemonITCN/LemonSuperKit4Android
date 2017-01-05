@@ -7,6 +7,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 import net.lemonsoft.lemonkit.core_graphics.CGRect;
+import net.lemonsoft.lemonkit.core_graphics.CGSize;
 import net.lemonsoft.lemonkit.core_native_view.LKScrollView;
 import net.lemonsoft.lemonkit.ui_kit.UIColor;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;
@@ -29,8 +30,10 @@ public class MainViewController extends UIViewController {
 //        this.view.setBackgroundColor(UIColor.colorWithRedGreenBlueAlpha(0.7f, 0.6f, 0.5f, 0.9f));
 
         LKScrollView scrollView = new LKScrollView(getApplicationContext());
-        scrollView.setX(100);
-        scrollView.setY(100);
+        scrollView.setX(160);
+        scrollView.setY(560);
+        scrollView.setContentSize(CGSize.make(0, 3000));
+        scrollView.setBounces(false);
         scrollView.setLayoutParams(new RelativeLayout.LayoutParams(800, 800));
         scrollView.setBackgroundColor(Color.GRAY);
         this.view.addView(scrollView);
