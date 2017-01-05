@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import net.lemonsoft.lemonkit.core_graphics.CGPoint;
 import net.lemonsoft.lemonkit.core_graphics.CGSize;
+import net.lemonsoft.lemonkit.core_native_delegate.LKScrollViewDelegate;
 
 /**
  * LemonKit - 自定义高级ScrollView
@@ -30,6 +31,10 @@ public class LKScrollView extends FrameLayout {
      * 弹簧回弹效果
      */
     private boolean bounces = true;
+    /**
+     * LKScrollView的代理对象
+     */
+    private LKScrollViewDelegate delegate = null;
 
     private RelativeLayout contentView;
     private VelocityTracker tracker;
@@ -83,6 +88,8 @@ public class LKScrollView extends FrameLayout {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 isTouching = true;
+                if (delegate != null)// 调用开始滑动的代理函数
+                    delegate.scrollViewWillBeginDragging(this);
                 if (scrollRunnable != null) {
                     scrollRunnable.endScroll();
                     scrollRunnable = null;
@@ -266,6 +273,8 @@ public class LKScrollView extends FrameLayout {
      * 一般情况下改变水平坐标的时候触发
      */
     private synchronized void setBasicX(float x) {
+        if (delegate != null)// 调用代理函数
+            delegate.scrollViewDidScroll(this);
         contentView.setX(x);
     }
 
@@ -273,6 +282,8 @@ public class LKScrollView extends FrameLayout {
      * 一般情况下改变垂直坐标的时候触发
      */
     private synchronized void setBasicY(float y) {
+        if (delegate != null)// 调用代理函数
+            delegate.scrollViewDidScroll(this);
         contentView.setY(y);
     }
 
@@ -353,6 +364,8 @@ public class LKScrollView extends FrameLayout {
                 if (contentView.getY() < 0)
                     setBasicY(Math.min(0, mScroller.getCurrY()));
                 postDelayed(this, 16);
+            } else if (delegate != null) {// 调用滑动停止的代理函数
+                delegate.scrollViewDidEndDecelerating(LKScrollView.this);
             }
         }
 
@@ -362,6 +375,12 @@ public class LKScrollView extends FrameLayout {
 
         public void startScroll(int velocityX, int velocityY) {
             mScroller.fling((int) contentView.getX(), (int) contentView.getY(), velocityX, velocityY, -getMaxX(), 0, -getMaxY(), 0);
+            if (delegate != null && mScroller.computeScrollOffset())// 调用即将停止drag的代理函数
+                delegate.scrollViewWillEndDragging(LKScrollView.this, CGPoint.make(velocityX, velocityY), CGPoint.make(-mScroller.getFinalX(), -mScroller.getFinalY()));
+            if (delegate != null) { // 调用停止drag的代理函数
+                delegate.scrollViewDidEndDragging(LKScrollView.this, velocityX != 0 || velocityY != 0);
+                delegate.scrollViewWillBeginDecelerating(LKScrollView.this);
+            }
         }
 
         public void endScroll() {

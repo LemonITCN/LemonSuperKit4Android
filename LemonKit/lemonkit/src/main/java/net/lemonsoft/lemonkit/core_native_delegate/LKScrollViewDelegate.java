@@ -63,7 +63,7 @@ public interface LKScrollViewDelegate {
 //    TODO
 
     /**
-     * 设置要缩放的 scrollView 上面的哪一个子视图 , 只能是子视图 , 不能是ScrollView 本身
+     * 设置要缩放的 scrollView 上面的哪一个子视图 , 只能是子视图 , 不能是ScrollView本身
      *
      * @return 要缩放的子视图
      */
@@ -77,13 +77,14 @@ public interface LKScrollViewDelegate {
      */
 //    void scrollViewWillBeginZooming(LKScrollView scrollView, View view);
 
+    // TODO
     /**
      * 当已经缩放的时候回调该方法，缩放在预设最小值和最大值中间的时候才可用（在回弹动画之后被调用）
      *
      * @param view  缩放的子视图
      * @param scale 缩放的比例
      */
-    void scrollViewDidEndZooming(LKScrollView scrollView, View view, float scale);
+//    void scrollViewDidEndZooming(LKScrollView scrollView, View view, float scale);
 
     /**
      * 当要滚到视图顶部的时候回调此函数询问用户是否能回到顶部，该方法当设置scrollsToTop=true的时候才会回调

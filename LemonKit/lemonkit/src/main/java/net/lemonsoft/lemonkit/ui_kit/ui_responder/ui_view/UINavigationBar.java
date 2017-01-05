@@ -5,5 +5,5 @@ package net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view;
  * Created by lemonsoft on 2017/1/1.
  */
 
-public class UINavigationBar {
+public class UINavigationBar extends UIView {
 }
