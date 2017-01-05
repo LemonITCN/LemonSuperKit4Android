@@ -32,7 +32,7 @@ public class MainViewController extends UIViewController {
 //        this.view.setBackgroundColor(UIColor.colorWithRedGreenBlueAlpha(0.7f, 0.6f, 0.5f, 0.9f));
 
         final LKScrollView scrollView = new LKScrollView(getApplicationContext());
-        scrollView.setContentSize(CGSize.make(3000, 3000));
+        scrollView.setContentSize(CGSize.make(0, 3000));
 //        scrollView.setBounces(false);
         scrollView.setLayoutParams(new RelativeLayout.LayoutParams(1060, 1700));
 //        scrollView.setBackgroundColor(Color.GRAY);

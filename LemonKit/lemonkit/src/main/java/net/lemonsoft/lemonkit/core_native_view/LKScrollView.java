@@ -46,8 +46,8 @@ public class LKScrollView extends FrameLayout {
         textView.setLayoutParams(new RelativeLayout.LayoutParams(30000, 30000));
         textView.setTextSize(200);
         textView.setTextColor(Color.WHITE);
-        contentView.setX(0);
-        contentView.setY(0);
+        setBasicX(0);
+        setBasicY(0);
         contentView.addView(textView);
         this.addView(contentView);
     }
@@ -94,21 +94,27 @@ public class LKScrollView extends FrameLayout {
                 initTouchStartY(event);
                 break;
             }
+
+            case MotionEvent.ACTION_POINTER_DOWN: {
+                System.out.println("点击了一根手指");
+                break;
+            }
             case MotionEvent.ACTION_MOVE: {
                 if (tracker != null)
                     tracker.addMovement(event);
                 float currentX = startX + event.getX() - moveX;
                 if (currentX < 0 && currentX > -getMaxX())// 在中间横轴显示区域滑动
-                    contentView.setX(currentX);
+                    setBasicX(currentX);
                 else if (getXCanBounces())// 水平边缘，如果有回弹效果
                     setDampedX(currentX);
                 else initTouchStartX(event);// 防止横向无回弹时候仍然拉动的话再次回拉时候距离延迟
                 float currentY = startY + event.getY() - moveY;
                 if (currentY < 0 && currentY > -getMaxY())// 在中间纵轴显示区域滑动
-                    contentView.setY(currentY);
+                    setBasicY(currentY);
                 else if (getYCanBounces())// 垂直边缘，如果有回弹效果
                     setDampedY(currentY);
                 else initTouchStartY(event);// 防止纵向无回弹时候仍然拉动的话再次回拉时候距离延迟
+//                System.out.println("current y :" + currentY);
                 break;
             }
             case MotionEvent.ACTION_UP: {
@@ -222,7 +228,7 @@ public class LKScrollView extends FrameLayout {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 if (!isTouching)// 有触摸的时候，不适用动画改变
-                    contentView.setX((Float) animation.getAnimatedValue());
+                    setBasicX((Float) animation.getAnimatedValue());
             }
         });
         animator.start();
@@ -240,7 +246,7 @@ public class LKScrollView extends FrameLayout {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 if (!isTouching)// 有触摸的时候，不适用动画改变
-                    contentView.setY((Float) animation.getAnimatedValue());
+                    setBasicY((Float) animation.getAnimatedValue());
             }
         });
         animator.start();
@@ -257,15 +263,29 @@ public class LKScrollView extends FrameLayout {
     }
 
     /**
+     * 一般情况下改变水平坐标的时候触发
+     */
+    private synchronized void setBasicX(float x) {
+        contentView.setX(x);
+    }
+
+    /**
+     * 一般情况下改变垂直坐标的时候触发
+     */
+    private synchronized void setBasicY(float y) {
+        contentView.setY(y);
+    }
+
+    /**
      * 设置经过阻尼函数处理过的x坐标
      *
      * @param x 横坐标
      */
-    public void setDampedX(float x) {
+    private void setDampedX(float x) {
         if (x > 0)
-            contentView.setX((float) Math.sqrt(x) * 10);
+            setBasicX((float) Math.sqrt(x) * 10);
         else if (x < -getMaxY())
-            contentView.setX((float) -(Math.sqrt(Math.abs(x) - getMaxX())) * 10 - getMaxX());
+            setBasicX((float) -(Math.sqrt(Math.abs(x) - getMaxX())) * 10 - getMaxX());
     }
 
     /**
@@ -273,11 +293,12 @@ public class LKScrollView extends FrameLayout {
      *
      * @param y 纵坐标
      */
-    public void setDampedY(float y) {
+    private void setDampedY(float y) {
         if (y > 0)
-            contentView.setY((float) Math.sqrt(y) * 10);
+//            setBasicY((float) Math.sqrt(y) * 10);
+            setBasicY(y / 3.0f);
         else if (y < -getMaxY())
-            contentView.setY((float) -(Math.sqrt(Math.abs(y) - getMaxY())) * 10 - getMaxY());
+            setBasicY((float) -(Math.sqrt(Math.abs(y) - getMaxY())) * 10 - getMaxY());
     }
 
     public CGPoint getContentOffset() {
@@ -328,9 +349,9 @@ public class LKScrollView extends FrameLayout {
         public void run() {
             if (mScroller.computeScrollOffset()) {
                 if (contentView.getX() < 0)
-                    contentView.setX(Math.min(0, mScroller.getCurrX()));
+                    setBasicX(Math.min(0, mScroller.getCurrX()));
                 if (contentView.getY() < 0)
-                    contentView.setY(Math.min(0, mScroller.getCurrY()));
+                    setBasicY(Math.min(0, mScroller.getCurrY()));
                 postDelayed(this, 16);
             }
         }
