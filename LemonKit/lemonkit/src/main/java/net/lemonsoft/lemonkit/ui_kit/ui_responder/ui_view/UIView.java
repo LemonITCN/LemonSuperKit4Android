@@ -1,12 +1,18 @@
 package net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view;
 
 import android.content.Context;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Camera;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.DrawFilter;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Region;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.View;
 import android.widget.RelativeLayout;
 
