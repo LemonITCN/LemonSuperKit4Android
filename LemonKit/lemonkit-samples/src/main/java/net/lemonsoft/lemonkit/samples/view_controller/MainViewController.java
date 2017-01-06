@@ -1,5 +1,6 @@
 package net.lemonsoft.lemonkit.samples.view_controller;
 
+import net.lemonsoft.lemonbubble.LemonBubble;
 import net.lemonsoft.lemonkit.core_graphics.CGRect;
 import net.lemonsoft.lemonkit.ui_kit.UIColor;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.ui_control.UILabel;
@@ -19,6 +20,8 @@ public class MainViewController extends UIViewController {
         label.layer.setCornerRadius(80);
         label.layer.setBorderColor(UIColor.redColor().cgColor());
         this.view.setBackgroundColor(UIColor.colorWithRedGreenBlueAlpha(0.7f, 0.6f, 0.5f, 0.9f));
+
+        LemonBubble.showRight(this, "hello", 2000);
 
 //        final LKScrollView scrollView = new LKScrollView(getApplicationContext());
 //        scrollView.setContentSize(CGSize.make(0, 3000));
