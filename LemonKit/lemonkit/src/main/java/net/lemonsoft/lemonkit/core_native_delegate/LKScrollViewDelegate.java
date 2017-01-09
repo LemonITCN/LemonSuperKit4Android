@@ -86,16 +86,21 @@ public interface LKScrollViewDelegate {
      */
 //    void scrollViewDidEndZooming(LKScrollView scrollView, View view, float scale);
 
+    // TODO
+
     /**
+     * 当用户点击状态栏的时候，调用此方法
      * 当要滚到视图顶部的时候回调此函数询问用户是否能回到顶部，该方法当设置scrollsToTop=true的时候才会回调
      *
      * @return 是否允许回到顶部的布尔值
      */
-    boolean scrollViewShouldScrollToTop(LKScrollView scrollView);
+//    boolean scrollViewShouldScrollToTop(LKScrollView scrollView);
+
+    // TODO
 
     /**
      * 当已经滚动到顶部之后回调的函数（动画执行完毕）
      */
-    void scrollViewDidScrollToTop(LKScrollView scrollView);
+//    void scrollViewDidScrollToTop(LKScrollView scrollView);
 
 }

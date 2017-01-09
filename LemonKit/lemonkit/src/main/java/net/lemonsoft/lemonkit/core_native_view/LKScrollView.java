@@ -1,5 +1,7 @@
 package net.lemonsoft.lemonkit.core_native_view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
@@ -230,7 +232,7 @@ public class LKScrollView extends FrameLayout {
      */
     public void scrollToX(float x, boolean animated) {
         final ValueAnimator animator = ValueAnimator.ofFloat(contentView.getX(), x);
-        animator.setDuration(animated ? 300 : 0);
+        animator.setDuration(animated ? 200 : 0);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -248,12 +250,19 @@ public class LKScrollView extends FrameLayout {
      */
     public void scrollToY(float y, boolean animated) {
         ValueAnimator animator = ValueAnimator.ofFloat(contentView.getY(), y);
-        animator.setDuration(animated ? 300 : 0);
+        animator.setDuration(animated ? 200 : 0);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 if (!isTouching)// 有触摸的时候，不适用动画改变
                     setBasicY((Float) animation.getAnimatedValue());
+            }
+        });
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                delegate.scrollViewDidEndScrollingAnimation(LKScrollView.this);
             }
         });
         animator.start();
@@ -313,7 +322,7 @@ public class LKScrollView extends FrameLayout {
     }
 
     public CGPoint getContentOffset() {
-        return new CGPoint(Math.abs(contentView.getX()), Math.abs(contentView.getY()));
+        return new CGPoint(-contentView.getX(), -contentView.getY());
     }
 
     /**
@@ -349,6 +358,14 @@ public class LKScrollView extends FrameLayout {
 
     public void setBounces(boolean bounces) {
         this.bounces = bounces;
+    }
+
+    public LKScrollViewDelegate getDelegate() {
+        return delegate;
+    }
+
+    public void setDelegate(LKScrollViewDelegate delegate) {
+        this.delegate = delegate;
     }
 
     private class ScrollRunnable implements Runnable {
