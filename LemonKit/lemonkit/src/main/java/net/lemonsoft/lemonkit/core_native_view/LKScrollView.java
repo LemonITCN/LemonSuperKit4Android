@@ -7,6 +7,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
@@ -46,17 +48,9 @@ public class LKScrollView extends FrameLayout {
         super(context);
         this.setBackgroundColor(Color.WHITE);
         this.contentView = new RelativeLayout(context);
-        this.contentView.setBackgroundColor(Color.BLUE);
-        this.contentView.setLayoutParams(new FrameLayout.LayoutParams(3000, 3000));
-        TextView textView = new TextView(context);
-        textView.setText("HELLO LemonKit");
-        textView.setLayoutParams(new RelativeLayout.LayoutParams(30000, 30000));
-        textView.setTextSize(200);
-        textView.setTextColor(Color.WHITE);
-        setBasicX(0);
-        setBasicY(0);
-        contentView.addView(textView);
-        this.addView(contentView);
+        this.contentView.setBackgroundColor(Color.parseColor("#abcdef"));
+        this.contentView.setLayoutParams(new FrameLayout.LayoutParams(0, 0));
+        super.addView(contentView);
     }
 
     private float startX = 0;
@@ -350,6 +344,13 @@ public class LKScrollView extends FrameLayout {
 
     public void setContentSize(CGSize contentSize) {
         this.contentSize = contentSize;
+        this.contentView.setLayoutParams(
+                new LayoutParams(
+                        (int) Math.max(contentSize.width, getMeasuredWidth()),
+                        (int) Math.max(contentSize.height, getMeasuredHeight())
+                )
+        );
+        this.contentView.setBackgroundColor(Color.RED);
     }
 
     public boolean isBounces() {
@@ -367,6 +368,35 @@ public class LKScrollView extends FrameLayout {
     public void setDelegate(LKScrollViewDelegate delegate) {
         this.delegate = delegate;
     }
+
+    // add View override
+
+    @Override
+    public void addView(View child) {
+        contentView.addView(child);
+    }
+
+//    @Override
+//    public void addView(View child, int index) {
+//        contentView.addView(child, index);
+//    }
+//
+//    @Override
+//    public void addView(View child, int width, int height) {
+//        contentView.addView(child, width, height);
+//    }
+//
+//    @Override
+//    public void addView(View child, ViewGroup.LayoutParams params) {
+//        contentView.addView(child, params);
+//    }
+//
+//    @Override
+//    public void addView(View child, int index, ViewGroup.LayoutParams params) {
+//        contentView.addView(child, index, params);
+//    }
+
+    // end override add view
 
     private class ScrollRunnable implements Runnable {
 

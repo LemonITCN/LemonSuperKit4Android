@@ -1,20 +1,12 @@
 package net.lemonsoft.lemonkit.samples.view_controller;
 
-import android.os.Handler;
-import android.widget.RelativeLayout;
-
-import net.lemonsoft.lemonbubble.LemonBubble;
 import net.lemonsoft.lemonkit.core_adapter.UIScrollViewDelegateAdapter;
-import net.lemonsoft.lemonkit.core_graphics.CGPoint;
 import net.lemonsoft.lemonkit.core_graphics.CGRect;
 import net.lemonsoft.lemonkit.core_graphics.CGSize;
-import net.lemonsoft.lemonkit.core_native_adapter.LKScrollViewDelegateAdapter;
-import net.lemonsoft.lemonkit.core_native_delegate.LKScrollViewDelegate;
 import net.lemonsoft.lemonkit.core_native_tool.LKSizeTool;
-import net.lemonsoft.lemonkit.core_native_view.LKScrollView;
 import net.lemonsoft.lemonkit.ui_kit.UIColor;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIScrollView;
-import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.ui_control.UILabel;
+import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view_controller.UIViewController;
 
 public class MainViewController extends UIViewController {
@@ -39,11 +31,13 @@ public class MainViewController extends UIViewController {
         UIScrollView scrollView = new UIScrollView(LKSizeTool.getDefaultSizeTool().screenFrame());
         scrollView.setContentSize(CGSize.make(0, 1000));
         this.view.addSubView(scrollView);
+        UIView view = new UIView(CGRect.make(0, 0, 100, 100));
+        view.setBackgroundColor(UIColor.hotpinkColor());
+        scrollView.addSubView(view);
         scrollView.setDelegate(new UIScrollViewDelegateAdapter() {
             @Override
             public void scrollViewDidScroll(UIScrollView scrollView) {
                 super.scrollViewDidScroll(scrollView);
-                System.out.println(-1);
                 System.out.println(scrollView.getContentOffset().y);
             }
         });

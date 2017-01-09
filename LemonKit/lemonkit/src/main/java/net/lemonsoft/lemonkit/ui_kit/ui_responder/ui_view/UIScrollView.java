@@ -1,5 +1,7 @@
 package net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view;
 
+import android.widget.RelativeLayout;
+
 import net.lemonsoft.lemonkit.core_delegate.UIScrollViewDelegate;
 import net.lemonsoft.lemonkit.core_graphics.CGPoint;
 import net.lemonsoft.lemonkit.core_graphics.CGRect;
@@ -105,6 +107,10 @@ public class UIScrollView extends UIView<LKScrollView> implements LKScrollViewDe
         _gRV().setDelegate(this);
     }
 
+    public void addSubView(UIView view) {
+        _gRV().addView(view);
+        view.setLayoutParams(new RelativeLayout.LayoutParams((int) view.frame.size.width, (int) view.frame.size.height));
+    }
 
     // 中转调用LKScrollViewDelegate
 
