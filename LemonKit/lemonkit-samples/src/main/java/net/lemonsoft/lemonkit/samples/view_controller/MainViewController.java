@@ -1,9 +1,9 @@
 package net.lemonsoft.lemonkit.samples.view_controller;
 
-import net.lemonsoft.lemonkit.core_adapter.UIScrollViewDelegateAdapter;
-import net.lemonsoft.lemonkit.core_graphics.CGRect;
-import net.lemonsoft.lemonkit.core_graphics.CGSize;
-import net.lemonsoft.lemonkit.core_native_tool.LKSizeTool;
+import net.lemonsoft.lemonkit.ui_kit.adapter.UIScrollViewDelegateAdapter;
+import net.lemonsoft.lemonkit.core.graphics.CGRect;
+import net.lemonsoft.lemonkit.core.graphics.CGSize;
+import net.lemonsoft.lemonkit.native_ui.tools.LKSizeTool;
 import net.lemonsoft.lemonkit.ui_kit.UIColor;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIScrollView;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;

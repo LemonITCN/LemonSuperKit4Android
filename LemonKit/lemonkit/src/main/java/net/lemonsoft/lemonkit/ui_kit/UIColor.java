@@ -1,13 +1,12 @@
 package net.lemonsoft.lemonkit.ui_kit;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 
-import net.lemonsoft.lemonkit.core_graphics.CGColorRef;
-import net.lemonsoft.lemonkit.core_native_tool.LKColorTool;
+import net.lemonsoft.lemonkit.core.graphics.CGColorRef;
+import net.lemonsoft.lemonkit.native_ui.tools.LKColorTool;
 
 /**
  * LemonKit颜色描述对象

@@ -1,31 +1,19 @@
 package net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view;
 
 import android.content.Context;
-import android.graphics.BlurMaskFilter;
-import android.graphics.Camera;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.DrawFilter;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
-import android.graphics.Region;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import net.lemonsoft.lemonkit.core_animation.CALayer;
-import net.lemonsoft.lemonkit.core_base.LemonKit;
-import net.lemonsoft.lemonkit.core_graphics.CGRect;
-import net.lemonsoft.lemonkit.core_graphics.CGSize;
-import net.lemonsoft.lemonkit.core_native_tool.LKSizeTool;
-import net.lemonsoft.lemonkit.core_native_tool.LKViewAppearanceTool;
+import net.lemonsoft.lemonkit.core.base.LemonKit;
+import net.lemonsoft.lemonkit.core.graphics.CGRect;
+import net.lemonsoft.lemonkit.core.graphics.CGSize;
+import net.lemonsoft.lemonkit.native_ui.tools.LKSizeTool;
+import net.lemonsoft.lemonkit.native_ui.tools.LKViewAppearanceTool;
 import net.lemonsoft.lemonkit.ui_kit.UIColor;
 
 import java.lang.reflect.Constructor;
-import java.util.regex.Pattern;
 
 /**
  * 视图控件，LemonKit中所有视图控件的父类

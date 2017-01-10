@@ -1,6 +1,6 @@
 package net.lemonsoft.lemonkit.samples;
 
-import net.lemonsoft.lemonkit.core_base.LemonKitApp;
+import net.lemonsoft.lemonkit.core.base.LemonKitApp;
 
 /**
  * Created by LiuRi on 2016/12/28.

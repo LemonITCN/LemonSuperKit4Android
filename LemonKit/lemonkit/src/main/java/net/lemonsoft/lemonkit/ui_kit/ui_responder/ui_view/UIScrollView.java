@@ -2,12 +2,12 @@ package net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view;
 
 import android.widget.RelativeLayout;
 
-import net.lemonsoft.lemonkit.core_delegate.UIScrollViewDelegate;
-import net.lemonsoft.lemonkit.core_graphics.CGPoint;
-import net.lemonsoft.lemonkit.core_graphics.CGRect;
-import net.lemonsoft.lemonkit.core_graphics.CGSize;
-import net.lemonsoft.lemonkit.core_native_delegate.LKScrollViewDelegate;
-import net.lemonsoft.lemonkit.core_native_view.LKScrollView;
+import net.lemonsoft.lemonkit.ui_kit.delegate.UIScrollViewDelegate;
+import net.lemonsoft.lemonkit.core.graphics.CGPoint;
+import net.lemonsoft.lemonkit.core.graphics.CGRect;
+import net.lemonsoft.lemonkit.core.graphics.CGSize;
+import net.lemonsoft.lemonkit.native_ui.extend.delegate.LKScrollViewDelegate;
+import net.lemonsoft.lemonkit.native_ui.extend.view.LKScrollView;
 
 /**
  * UIScrollView 对 LKScrollView的封装

@@ -6,10 +6,10 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.os.Build;
 
-import net.lemonsoft.lemonkit.core_graphics.CGColorRef;
-import net.lemonsoft.lemonkit.core_native_model.LKViewAppearanceInfoModel;
-import net.lemonsoft.lemonkit.core_native_tool.LKColorTool;
-import net.lemonsoft.lemonkit.core_native_tool.LKSizeTool;
+import net.lemonsoft.lemonkit.core.graphics.CGColorRef;
+import net.lemonsoft.lemonkit.native_ui.model.LKViewAppearanceModel;
+import net.lemonsoft.lemonkit.native_ui.tools.LKColorTool;
+import net.lemonsoft.lemonkit.native_ui.tools.LKSizeTool;
 import net.lemonsoft.lemonkit.ui_kit.UIColor;
 import net.lemonsoft.lemonkit.ui_kit.ui_responder.ui_view.UIView;
 
@@ -36,7 +36,7 @@ public class CALayer {
     /**
      * 外观样式，例如圆角、边框等
      */
-    private LKViewAppearanceInfoModel _appearance;
+    private LKViewAppearanceModel _appearance;
     /**
      * 超过边界之外的内容是否隐藏
      */
@@ -44,7 +44,7 @@ public class CALayer {
 
     public CALayer(UIView view) {
         _v = view;
-        _appearance = new LKViewAppearanceInfoModel();
+        _appearance = new LKViewAppearanceModel();
     }
 
     public void setBackgroundColor(UIColor color) {
