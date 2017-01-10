@@ -52,6 +52,10 @@ public class CALayer {
         applyAppearance();
     }
 
+    public UIColor getBackgroundColor() {
+        return _appearance.getBackgroundColor();
+    }
+
     public void onDraw(Canvas canvas) {
         if (this.masksToBounds) {
             // 需要剪切应显示视图的其余部分
@@ -106,8 +110,12 @@ public class CALayer {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             // 高版本SDK使用新的API
             _v.setBackground(_appearance.createDrawable());
+            if (_v.get_rView() != null)
+                _v.get_rView().setBackground(_appearance.createDrawable());
         } else {
             _v.setBackgroundDrawable(_appearance.createDrawable());
+            if (_v.get_rView() != null)
+                _v.get_rView().setBackgroundDrawable(_appearance.createDrawable());
         }
     }
 

@@ -46,7 +46,6 @@ public class LKScrollView extends FrameLayout {
         super(context);
         this.setBackgroundColor(Color.WHITE);
         this.contentView = new RelativeLayout(context);
-        this.contentView.setBackgroundColor(Color.parseColor("#abcdef"));
         this.contentView.setLayoutParams(new FrameLayout.LayoutParams(0, 0));
         super.addView(contentView);
     }
@@ -344,11 +343,10 @@ public class LKScrollView extends FrameLayout {
         this.contentSize = contentSize;
         this.contentView.setLayoutParams(
                 new LayoutParams(
-                        (int) Math.max(contentSize.width, getMeasuredWidth()),
-                        (int) Math.max(contentSize.height, getMeasuredHeight())
+                        (int) Math.max(contentSize.width, getLayoutParams().width),
+                        (int) Math.max(contentSize.height, getLayoutParams().height)
                 )
         );
-        this.contentView.setBackgroundColor(Color.RED);
     }
 
     public boolean isBounces() {

@@ -45,10 +45,6 @@ public class UIView<T> extends RelativeLayout {
      */
     protected View _rView;
     /**
-     * 控件背景颜色存储控件
-     */
-    private UIColor _backgroundColor;
-    /**
      * 高级视图操作属性
      */
     public CALayer layer = new CALayer(this);
@@ -105,7 +101,7 @@ public class UIView<T> extends RelativeLayout {
      * @return 实际显示的控件View对象
      */
     public View get_rView() {
-        return get_rView();
+        return _rView;
     }
 
     /**
@@ -248,7 +244,7 @@ public class UIView<T> extends RelativeLayout {
      * @return UIColor颜色描述对象
      */
     public UIColor getBackgroundColor() {
-        return _backgroundColor;
+        return this.layer.getBackgroundColor();
     }
 
     /**
