@@ -39,6 +39,19 @@ public class LemonKit {
      * @param application 应用对象
      */
     public void init(Application application) {
+        System.out.println("KLKLK　　　　　　　　　　　　　　LKLKLK　　　　　　LKLKLK");
+        System.out.println("KLKLK　　　　　　　　　　　　　　LKLKLK　　　　LKLKLKLK");
+        System.out.println("KLKLK　　　　　　　　　　　　　　LKLKLK　　LKLKLKLK");
+        System.out.println("KLKLK　　　　　　　　　　　　　　LKLKLK　　LKLKLK");
+        System.out.println("KLKLK　　　　　　　　　　　　　　LKLKLKLKLKLK");
+        System.out.println("KLKLK　　　　　　　　　　　　　　LKLKLKLKLKLK");
+        System.out.println("KLKLK　　　　　　　　　　　　　　LKLKLKLKLKLKLK");
+        System.out.println("KLKLK　　　　　　　　　　　　　　LKLKLK　　LKLKLK");
+        System.out.println("KLKLK　　　　　　　　　　　　　　LKLKLK　　LKLKLKLK");
+        System.out.println("KLKLK　　　　　　　　　　　　　　LKLKLK　　　　LKLKLK");
+        System.out.println("KLKLK　　　　　　　　　　　　　　LKLKLK　　　　LKLKLKLK");
+        System.out.println("KLKLKLKLKLKLKLKLKLKLKLK　　　　 LKLKLK　　　　   LKLKLKLK");
+        System.out.println("KLKLKLKLKLKLKLKLKLKLKLK　　　   LKLKLKLK　　         LKLKLKLK");
         this.application = application;
         // 初始化LemonKit尺寸工具类
         LKSizeTool.getDefaultSizeTool().setContext(this.getAppContext());

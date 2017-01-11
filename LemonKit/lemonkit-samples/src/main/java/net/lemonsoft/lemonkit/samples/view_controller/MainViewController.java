@@ -1,5 +1,6 @@
 package net.lemonsoft.lemonkit.samples.view_controller;
 
+import net.lemonsoft.lemonbubble.LemonBubble;
 import net.lemonsoft.lemonkit.ui_kit.adapter.UIScrollViewDelegateAdapter;
 import net.lemonsoft.lemonkit.core.graphics.CGRect;
 import net.lemonsoft.lemonkit.core.graphics.CGSize;
@@ -26,7 +27,7 @@ public class MainViewController extends UIViewController {
 //
 //        LemonBubble.showRight(this, "hello", 2000);
 
-        this.view.setBackgroundColor(UIColor.pinkColor());
+        this.view.setBackgroundColor(UIColor.blueColor());
 
         UIScrollView scrollView = new UIScrollView(LKSizeTool.getDefaultSizeTool().screenFrame());
         scrollView.setContentSize(CGSize.make(0, 1000));
@@ -42,20 +43,6 @@ public class MainViewController extends UIViewController {
             }
         });
 
-
-//        final LKScrollView scrollView = new LKScrollView(getApplicationContext());
-//        scrollView.setContentSize(CGSize.make(0, 3000));
-////        scrollView.setBounces(false);
-//        scrollView.setLayoutParams(new RelativeLayout.LayoutParams(1060, 1700));
-////        scrollView.setBackgroundColor(Color.GRAY);
-//        this.view.addView(scrollView);
-//        scrollView.setDelegate(new LKScrollViewDelegateAdapter() {
-//            @Override
-//            public void scrollViewDidScroll(LKScrollView scrollView) {
-//                super.scrollViewDidScroll(scrollView);
-//                System.out.println(scrollView.getContentOffset().y);
-//            }
-//        });
     }
 
 
