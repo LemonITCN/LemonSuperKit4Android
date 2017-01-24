@@ -26,6 +26,6 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     compile 'com.github.1em0nsOft:LemonBubble4Android:1.0.9'
-    compile 'com.github.1em0nsOft:LemonHello4Android:1.0.0'
+    compile 'com.github.1em0nsOft:LemonHello4Android:1.0.1'
     compile project(':lemonkit')
 }
