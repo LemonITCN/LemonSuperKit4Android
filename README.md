@@ -1,4 +1,4 @@
-# LemonKit4Android
+# LemonSuperKit4Android
 你是iOS开发者？还是Android开发者？还是想两个平台都玩玩？<(￣ˇ￣)/
 
 -------
@@ -16,7 +16,7 @@ public class MainViewController extends UIViewController {
     public void viewDidLoad() {
         super.viewDidLoad();
         UILabel label = new UILabel(CGRect.make(50, 50, 200, 100));
-        label.setText("Hello! LemonKit World.");
+        label.setText("Hello! LemonSuperKit World.");
         label.setBackgroundColor(UIColor.greenColor());
         this.view.addSubView(label);
     }
