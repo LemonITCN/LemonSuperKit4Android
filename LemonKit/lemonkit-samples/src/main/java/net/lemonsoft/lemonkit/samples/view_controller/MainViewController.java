@@ -29,6 +29,16 @@ public class MainViewController extends UIViewController {
 
         this.view.setBackgroundColor(UIColor.blueColor());
 
+//        LemonHello.getSuccessHello("提交成功", "恭喜您，您所填写的数据已经全部提交成功，我们的客服人员将在24小时内进行审核，请耐心等待.")
+//                .addAction(new LemonHelloAction("我知道啦", new LemonHelloActionDelegate() {
+//                    @Override
+//                    public void onClick(LemonHelloView helloView, LemonHelloInfo helloInfo, LemonHelloAction helloAction) {
+//                        helloView.hide();
+//                    }
+//                }))
+//                .show(MainActivity.this);
+
+
         UIScrollView scrollView = new UIScrollView(LKSizeTool.getDefaultSizeTool().screenFrame());
         scrollView.setContentSize(CGSize.make(0, 1000));
         this.view.addSubView(scrollView);
